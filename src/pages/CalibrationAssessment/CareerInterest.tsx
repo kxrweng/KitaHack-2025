@@ -1,12 +1,13 @@
 import React from 'react'
 import MilestonesMascot from '../../assets/MilestonesMascot.svg';
-import { useNavigate } from 'react-router';
+import {useNavigate} from "react-router";
 
-const Introduction = () => {
+const CareerInterest = () => {
     const navigate = useNavigate();
-    const navigateToCareerInterest = () => navigate("/new_user/career_interest");
-    return (
-    <div className = " flex flex-col gap-[30px] ">
+    const navigateToPrev = () => navigate(-1);
+    const navigateToMbtiCheck = () => navigate("/new_user/mbti_personality_check")
+  return (
+    <div className = " flex flex-col gap-[30px]">
     <div className = "flex flex-row ">
         <img src = {MilestonesMascot} className = "w-[301px] h-[238px]" />
         <div className = "flex flex-col w-full gap-5">
@@ -15,12 +16,11 @@ const Introduction = () => {
                     Miles
                 </div>
                 <div className = "bg-white text-xl pl-[24px] pr-[59px] py-[32px] w-[955px] outline-slate-500 rounded-xl outline-1 ">
-                Hello there Test User, welcome to Milestones! My name is Miles and I’ll be your friendly neighbourhood bot around here. My job is to help you get settled in nice and comfy. 😊
-                </div>
+                Great, it’s nice to know you a little better! I can now cater my responses to fit your demographic more. :)                </div>
 
             </div>
             <div className = "bg-white text-xl pl-[24px] pr-[59px] py-[32px] w-[955px] outline-slate-500 rounded-xl outline-1 ">
-            Before we move on, I’d like to know a little more about you so that we can make your experience here more personalised.                </div>
+            Now, let’s figure out your field and career of interest. These are important to help me recommend suitable pathways for you to follow during your time here at Milestones.            </div>
         </div>
     </div>
     <div className = "flex flex-col px-[272px] h-[448px] w-[752px] ">
@@ -28,32 +28,28 @@ const Introduction = () => {
             Test User
         </div>
         <div className = "flex flex-col gap-[24px] py-[16px] bg-white px-[24px] w-[800px] outline-slate-100 rounded-xl outline-1">
-            <div className = "flex flex-row mt-[16px] justify-between">
-                <div className = "flex flex-col gap-[8px] ">
-                    <div className = "text-[#1E3A8A] font-bold text-lg">
-                        Your Age
+            <div className = "flex flex-col gap-[24px] justify-between">
+                    <div className = "text-[#1D4ED8] text-lg font-normal mt-[16px] hover:cursor-pointer" onClick = {navigateToPrev}>
+                    &lt; Previous
                     </div>
-
-                    <input className = "bg-white p-4 w-[280px] h-[56px] outline-slate-300 rounded-xl outline-1" />
-                </div>
-
                 <div className = "flex flex-col gap-[8px]">
                     <div className = "text-[#1E3A8A] font-bold text-lg">
-                        Your Gender
+                        Field Of Interest
                     </div>
 
                     <select className = "bg-white p-4 w-[280px] h-[56px] outline-slate-300 rounded-xl outline-1">
-                        <option value = "Female">Female</option>
-                        <option value = "Male">Male</option>
+                        <option value = "ComputerScience">Computer Science</option>
+                        <option value = "Finance">Finance</option>
 
                     </select>
                 </div>
+
 
             </div>
 
             <div className = "flex flex-col gap-[8px]">
                 <div className = "text-[#1E3A8A] font-bold text-lg">
-                        Your Current Field
+                        Career Interest
                 </div>
 
                 <select className = "bg-white p-4 w-[280px] h-[56px] outline-slate-300 rounded-xl outline-1">
@@ -63,15 +59,21 @@ const Introduction = () => {
                 </select>
             </div>
 
-            <div className = "text-slate-700 text-xl">
-            *** Don’t worry, you can make changes to these later on if you need to!            
+            <div className = "flex flex-row ml-auto gap-[16px]">
+
+            <div className="bg-white border-1 border-[#1D4ED8] justify-center items-center text-[#1D4ED8] flex rounded-xl w-[160px] h-[50px] ">
+                <button className="text-xl py-1 hover:cursor-pointer" onClick = {() => navigate(-1)}>
+                    I am unsure
+                </button>
             </div>
-            
-            <div className="bg-[#1D4ED8] items-center justify-center  text-white flex rounded-xl w-[120px] h-[50px] ml-auto">
-                <button className="text-xl py-1 hover:cursor-pointer" onClick = {navigateToCareerInterest}>
+            <div className="bg-[#1D4ED8] justify-center items-center  text-white flex rounded-xl w-[120px] h-[50px] ">
+                <button className="text-xl py-1 hover:cursor-pointer" onClick = {navigateToMbtiCheck}>
                     Confirm
                 </button>
             </div>
+
+            </div>            
+            
 
            
         </div>
@@ -81,4 +83,4 @@ const Introduction = () => {
   )
 }
 
-export default Introduction
+export default CareerInterest
