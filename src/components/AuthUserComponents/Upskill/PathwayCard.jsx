@@ -1,16 +1,34 @@
-import React from "react";
+import React, { useState, memo } from "react";
 
-const PathwayCard = ({ pathway }) => {
-	console.log(pathway);
+const PathwayCard = memo(({ pathway }) => {
+	const [isDropDownOpen, setIsDropDownOpen] = useState(false);
 	const { title, imgSrc, completionPercentage, description } = pathway;
 
+	const toggleIsDropDownOpen = () => setIsDropDownOpen((prev) => !prev);
+
 	return (
-		<div className="flex flex-col border border-slate-400 shadow-2xl rounded-xl w-[300px]">
-			<div>
+		<div className="flex flex-col border border-slate-200 shadow-2xl rounded-xl w-[300px]  ">
+			<div className="relative">
 				<img
-					src={imgSrc}
-					className=" h-[188px] overflow-hidden rounded-t-xl"
+					src={`${imgSrc}?w=300&h=188&format=webp`}
+					loading="lazy"
+					className=" h-[188px] overflow-hidden rounded-t-xl object-cover w-full z-[10]"
 				/>
+				<img
+					src="/PathwayHamburgerIcon.svg"
+					className="absolute top-[12px] right-[12px] hover:cursor-pointer"
+					onClick={toggleIsDropDownOpen}
+				/>
+				{isDropDownOpen && (
+					<div className="absolute top-[45px] -right-[126px] bg-white border border-gray-200 shadow-md rounded-md z-[50]">
+						<div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+							Unpin Pathway
+						</div>
+						<div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+							Remove Pathway
+						</div>
+					</div>
+				)}
 			</div>
 
 			<div className="flex flex-col p-[16px] gap-[24px]">
@@ -25,6 +43,6 @@ const PathwayCard = ({ pathway }) => {
 			</div>
 		</div>
 	);
-};
+});
 
 export default PathwayCard;

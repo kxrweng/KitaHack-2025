@@ -1,12 +1,10 @@
-import { pinnedPathway } from "../../../data/PinnedPathway";
-
 import React from "react";
 import PathwayCard from "./PathwayCard";
 
-const PathwayCardGrid = () => {
+const PathwayCardGrid = ({ pathways }) => {
 	return (
-		<div className="grid grid-cols-4 gap-[32px] ">
-			{pinnedPathway.map((pathway, index) => (
+		<div className="flex-wrap justify-between flex w-full px-[24px] py-[32px]">
+			{pathways.map((pathway, index) => (
 				<PathwayCard
 					key={index}
 					pathway={pathway}

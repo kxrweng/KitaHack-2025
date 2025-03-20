@@ -4,12 +4,12 @@ import AuthUserHeader from "../components/AuthUserComponents/Layout/AuthUserHead
 import AuthUserFooter from "../components/AuthUserComponents/Layout/AuthUserFooter";
 const AuthUserLayout = () => {
 	return (
-		<div className="flex flex-col w-screen h-screen">
+		<div className="flex flex-col max-w-screen ">
 			<div className="flex ">
 				<AuthUserHeader />
 			</div>
 
-			<div className="flex w-full h-full bg-slate-100 ">
+			<div className="flex flex-1 bg-slate-100 ">
 				<Outlet />
 			</div>
 
