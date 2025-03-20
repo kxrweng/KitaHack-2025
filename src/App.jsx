@@ -2,7 +2,6 @@ import "./App.css";
 import Home from "./pages/MainPage/Home";
 import AboutUs from "./pages/MainPage/AboutUs";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import PageLayout from "./layouts/PageLayout";
 import NewUserLanding from "./pages/CalibrationAssessment/Landing";
 import CareerInterest from "./pages/CalibrationAssessment/CareerInterest";
 import RecommendCareerInterest from "./pages/CalibrationAssessment/RecommendCareerInterest";
