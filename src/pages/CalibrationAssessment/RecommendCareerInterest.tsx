@@ -1,5 +1,4 @@
 import React from 'react'
-import MilestonesMascot from '../../assets/MilestonesMascot.svg';
 import { useNavigate } from 'react-router';
 
 const RecommendCareerInterest = () => {
@@ -8,7 +7,7 @@ const RecommendCareerInterest = () => {
   return (
     <div className = " flex flex-col gap-[30px] ">
     <div className = "flex flex-row ">
-        <img src = {MilestonesMascot} className = "w-[301px] h-[238px]" />
+        <img src = "/MilestonesMascot.svg" className = "w-[301px] h-[238px]" />
         <div className = "flex flex-col w-full gap-5">
             <div className = "flex flex-col">
                 <div className = "bg-[#1D4ED8] w-fit px-[32px] py-[8px] text-white relative top-3 left-5 font-mono rounded-full">

@@ -23,7 +23,7 @@ const App = () => {
   <BrowserRouter>
   <Routes>
     <Route path="/new_user" element={<NewUserLayout />}>
-      <Route path="landing" element={<Introduction />} />
+      <Route index element={<Introduction />} />
       <Route path="career_interest" element={<CareerInterest />} />
       <Route path="mbti_personality_check" element={<MbtiPersonalityCheck />} />
       <Route path="recommended_career_interest" element={<RecommendCareerInterest />} />
