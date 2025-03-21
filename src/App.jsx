@@ -9,6 +9,7 @@ import AuthUserLanding from "./pages/Upskill/Landing";
 import AuthUserLayout from "./layouts/AuthUserLayout";
 import InterviewPracticeLanding from "./pages/InterviewPractice/Landing";
 import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
+import Applied from "./pages/Applied"
 
 import { Navigate } from "react-router-dom";
 
@@ -65,6 +66,9 @@ const App = () => {
 						path="resume_builder"
 						element={<ResumeBuilderLanding />}
 					/>
+
+					<Route 
+						path ="applied" element = {<Applied />}></Route>
 				</Route>
 			</Routes>
 		</BrowserRouter>
