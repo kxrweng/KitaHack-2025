@@ -3,7 +3,7 @@ import { useNavigate } from "react-router";
 
 const Introduction = () => {
 	const navigate = useNavigate();
-	const navigateToCareerInterest = () => navigate("career_interest");
+	const navigateToCareerInterest = () => navigate("/new_user/career_interest");
 	return (
 		<div className=" flex flex-col gap-[30px] ">
 			<div className="flex flex-row ">
