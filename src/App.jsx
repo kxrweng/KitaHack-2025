@@ -1,6 +1,7 @@
 import './App.css'
 import Home from "./pages/Home"
 import AboutUs from "./pages/AboutUs"
+import Applied from "./pages/Applied"
 import {BrowserRouter, Routes, Route} from 'react-router-dom'
 import PageLayout from './layouts/PageLayout'
 
@@ -12,6 +13,7 @@ const App = () => {
       <Route path = "/" element = {<PageLayout />}>
       <Route index element = {<Home />}></Route>
       <Route path ="about_us" element = {<AboutUs />}></Route>
+      <Route path ="applied" element = {<Applied />}></Route>
       </Route>
     </Routes>
    </BrowserRouter>
