@@ -1,6 +1,4 @@
 import "./App.css";
-import Home from "./pages/MainPage/Home";
-import AboutUs from "./pages/MainPage/AboutUs";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import NewUserLanding from "./pages/CalibrationAssessment/Landing";
 import CareerInterest from "./pages/CalibrationAssessment/CareerInterest";
@@ -9,6 +7,9 @@ import MbtiPersonalityCheck from "./pages/CalibrationAssessment/MbtiPersonalityC
 import NewUserLayout from "./layouts/NewUserLayout";
 import AuthUserLanding from "./pages/Upskill/Landing";
 import AuthUserLayout from "./layouts/AuthUserLayout";
+import InterviewPracticeLanding from "./pages/InterviewPractice/Landing";
+import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
+
 import { Navigate } from "react-router-dom";
 
 const App = () => {
@@ -54,6 +55,15 @@ const App = () => {
 					<Route
 						path="landing"
 						element={<AuthUserLanding />}
+					/>
+
+					<Route
+						path="interview_practice"
+						element={<InterviewPracticeLanding />}
+					/>
+					<Route
+						path="resume_builder"
+						element={<ResumeBuilderLanding />}
 					/>
 				</Route>
 			</Routes>

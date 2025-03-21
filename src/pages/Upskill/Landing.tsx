@@ -17,12 +17,82 @@ const Landing = () => {
 	const [isFilterDropDownOpen, setIsFilterDropDownOpen] = useState(false);
 
 	const toggleIsFilterDropDownOpen = () => {
-		console.log("Toggled");
 		setIsFilterDropDownOpen((prev) => !prev);
 	};
 
 	return (
-		<div className="w-full px-[72px] py-[36px] gap-[48px] flex flex-col">
+		<div className="w-full px-[72px] py-[36px] gap-[48px] flex flex-col relative">
+			{isFilterDropDownOpen && (
+				<div className="fixed inset-0 flex justify-center items-center bg-[rgba(49,49,49,0.8)] z-[99]">
+					<div className="bg-white relative   flex  flex-col py-[48px] px-[64px] gap-[36px] rounded-xl">
+						<div className="flex flex-row  justify-between w-full">
+							<div className="text-[#1E3A8A] font-semibold text-xl">
+								Filter Pathways
+							</div>
+							<div
+								className="text-[#1E3A8A] font-semibold text-xl hover:cursor-pointer"
+								onClick={toggleIsFilterDropDownOpen}
+							>
+								X
+							</div>
+						</div>
+
+						<div className="flex flex-col gap-[36px]">
+							<div className="flex flex-col gap-[16px]">
+								<div className="text-[#1E3A8A] font-semibold text-xl">
+									Interested Fields
+								</div>
+								<div className="flex flex-row gap-[16px]">
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										Information Technology
+									</div>
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										Management
+									</div>
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										Add More
+									</div>
+								</div>
+							</div>
+
+							<div className="flex flex-col gap-[16px]">
+								<div className="text-[#1E3A8A] font-semibold text-xl">
+									Interested Role(s)
+								</div>
+								<div className="flex flex-row gap-[16px]">
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										Software Engineer
+									</div>
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										Data Scientist
+									</div>
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										Cashier
+									</div>
+								</div>
+							</div>
+
+							<div className="flex flex-col gap-[16px]">
+								<div className="text-[#1E3A8A] font-semibold text-xl">
+									MBTI Personality
+								</div>
+								<div className="flex flex-row gap-[16px]">
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										INTJ
+									</div>
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										Management
+									</div>
+									<div className="border items-center text-center text-[#1E3A8A] border-[#1E3A8A] rounded-full px-[16px] py-[5px]">
+										Add More
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			)}
+
 			<div className="flex justify-center">
 				<img src="/WelcomeHero.png" />
 			</div>

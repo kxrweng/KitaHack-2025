@@ -1,7 +1,16 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 
 const AuthUserHeader = () => {
+	const navigate = useNavigate();
+
 	const [currentSelectedPage, setCurrentSelectedPage] = useState("Upskill");
+
+	if (currentSelectedPage === "ResumeBuilder") {
+		navigate("/auth_user/resume_builder");
+	} else if (currentSelectedPage === "InterviewPractice") {
+		navigate("/auth_user/interview_practice");
+	}
 
 	const selectedStyle = {
 		color: "white",
