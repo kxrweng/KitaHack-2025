@@ -5,6 +5,7 @@ const pinnedPathway = [
 		completionPercentage: 75,
 		description:
 			"Experience what it takes to be a software engineer. Learn material about development and create digital solutions to solve daily problems.",
+		link: "/auth_user/pathways/software_engineer"
 	},
 
 	{

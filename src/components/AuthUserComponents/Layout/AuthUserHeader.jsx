@@ -1,16 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
 const AuthUserHeader = () => {
 	const navigate = useNavigate();
+	console.log(navigate);
 
 	const [currentSelectedPage, setCurrentSelectedPage] = useState("Upskill");
+	console.log(currentSelectedPage);
 
-	if (currentSelectedPage === "ResumeBuilder") {
-		navigate("/auth_user/resume_builder");
-	} else if (currentSelectedPage === "InterviewPractice") {
-		navigate("/auth_user/interview_practice");
-	}
+	useEffect(() => {
+		console.log("UseEffect is run");
+		if (currentSelectedPage === "Upskill") {
+			navigate("/auth_user/pathways");
+		} else if (currentSelectedPage === "InterviewPractice") {
+			navigate("/auth_user/interview_practice");
+		} else if (currentSelectedPage === "ResumeBuilder") {
+			navigate("/auth_user/resume_builder");
+		}
+		// eslint-disable-next-line react-hooks/exhaustive-deps
+	}, [currentSelectedPage]);
 
 	const selectedStyle = {
 		color: "white",

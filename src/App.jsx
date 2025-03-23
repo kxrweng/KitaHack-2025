@@ -1,15 +1,18 @@
 import "./App.css";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import NewUserLanding from "./pages/CalibrationAssessment/Landing";
-import CareerInterest from "./pages/CalibrationAssessment/CareerInterest";
-import RecommendCareerInterest from "./pages/CalibrationAssessment/RecommendCareerInterest";
-import MbtiPersonalityCheck from "./pages/CalibrationAssessment/MbtiPersonalityCheck";
+import NewUserLanding from "./pages/NewUserPages/CalibrationAssessment/Landing";
+import CareerInterest from "./pages/NewUserPages/CalibrationAssessment/CareerInterest";
+import RecommendCareerInterest from "./pages/NewUserPages/CalibrationAssessment/RecommendCareerInterest";
+import MbtiPersonalityCheck from "./pages/NewUserPages/CalibrationAssessment/MbtiPersonalityCheck";
 import NewUserLayout from "./layouts/NewUserLayout";
-import AuthUserLanding from "./pages/Upskill/Landing";
+import Pathways from "./pages/AuthUserPages/Upskill/Landing";
 import AuthUserLayout from "./layouts/AuthUserLayout";
-import InterviewPracticeLanding from "./pages/InterviewPractice/Landing";
-import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
-import Applied from "./pages/Applied"
+import InterviewPracticeLanding from "./pages/AuthUserPages/InterviewPractice/Landing";
+import ResumeBuilderLanding from "./pages/AuthUserPages/ResumeBuilder/Landing";
+import Applied from "./pages/Applied";
+import SoftwareEngineerModuleOne from "./pages/AuthUserPages/Upskill/SEPath/ModuleOne";
+
+import SoftwareEngineerPath from "./pages/AuthUserPages/Upskill/SEPath/SoftwareEngineerPath";
 
 import { Navigate } from "react-router-dom";
 
@@ -54,10 +57,17 @@ const App = () => {
 					element={<AuthUserLayout />}
 				>
 					<Route
-						path="landing"
-						element={<AuthUserLanding />}
+						path="pathways"
+						element={<Pathways />}
 					/>
-
+					<Route
+						path="pathways/software_engineer"
+						element={<SoftwareEngineerPath />}
+					/>
+					<Route
+						path="pathways/software_engineer/module_1"
+						element={<SoftwareEngineerModuleOne />}
+					/>
 					<Route
 						path="interview_practice"
 						element={<InterviewPracticeLanding />}
@@ -66,9 +76,10 @@ const App = () => {
 						path="resume_builder"
 						element={<ResumeBuilderLanding />}
 					/>
-
-					<Route 
-						path ="applied" element = {<Applied />}></Route>
+					<Route
+						path="applied"
+						element={<Applied />}
+					/>
 				</Route>
 			</Routes>
 		</BrowserRouter>
