@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router";
+import { SEModules } from "../../../../data/SEModules";
 
 const SoftwareEngineerPath = () => {
 	const navigate = useNavigate();
@@ -12,61 +13,6 @@ const SoftwareEngineerPath = () => {
 		"Implement security best practices in software development.",
 		"Collaborate in a development team using Agile and DevOps methodologies.",
 		"Demonstrate problem-solving skills through a final software engineering project.",
-	];
-	const modules = [
-		{
-			id: 1,
-			name: "Introduction to Software Engineering",
-			chapters: [
-				"Overview of software development methodologies (Agile, Waterfall, DevOps)",
-				"Software development lifecycle (SDLC)",
-			],
-		},
-		{
-			id: 2,
-			name: "Programming Fundamentals",
-			chapters: [],
-		},
-		{
-			id: 3,
-			name: "Software Design and Architecture",
-			chapters: [],
-		},
-		{
-			id: 4,
-			name: "Version Control And Collaboration",
-			chapters: [],
-		},
-		{
-			id: 5,
-			name: "Testing and Quality Assurance",
-			chapters: [],
-		},
-		{
-			id: 6,
-			name: "Databases and Backend Development",
-			chapters: [],
-		},
-		{
-			id: 7,
-			name: "Frontend Development and User Experience (UX)",
-			chapters: [],
-		},
-		{
-			id: 8,
-			name: "Deployment and DevOps Basics",
-			chapters: [],
-		},
-		{
-			id: 9,
-			name: "Security in Software Development",
-			chapters: [],
-		},
-		{
-			id: 10,
-			name: "A Day in The Life of A Software Engineer",
-			chapters: [],
-		},
 	];
 
 	const [openModules, setOpenModules] = useState({});
@@ -146,7 +92,7 @@ const SoftwareEngineerPath = () => {
 
 				<div className="flex flex-col gap-[16px]">
 					<div className="text-xl font-semibold text-[#1E3A8A]">Modules</div>
-					{modules.map((module) => {
+					{SEModules.map((module) => {
 						return (
 							<div
 								className="flex flex-col gap-[4px]"
@@ -175,7 +121,7 @@ const SoftwareEngineerPath = () => {
 											}`}
 										>
 											{module.chapters.map((chapter, idx) => (
-												<li key={idx}>{chapter}</li>
+												<li key={idx}>{chapter.title}</li>
 											))}
 										</ul>
 									) : null}

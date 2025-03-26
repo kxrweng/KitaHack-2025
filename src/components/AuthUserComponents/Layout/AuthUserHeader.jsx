@@ -3,13 +3,10 @@ import { useNavigate } from "react-router-dom";
 
 const AuthUserHeader = () => {
 	const navigate = useNavigate();
-	console.log(navigate);
 
 	const [currentSelectedPage, setCurrentSelectedPage] = useState("Upskill");
-	console.log(currentSelectedPage);
 
 	useEffect(() => {
-		console.log("UseEffect is run");
 		if (currentSelectedPage === "Upskill") {
 			navigate("/auth_user/pathways");
 		} else if (currentSelectedPage === "InterviewPractice") {
@@ -37,7 +34,7 @@ const AuthUserHeader = () => {
 	const onClickPageNavigator = (page) => setCurrentSelectedPage(page);
 
 	return (
-		<div className="flex flex-row w-full py-[24px] px-[72px] drop-shadow-2xl ">
+		<div className="flex flex-row w-full py-[24px] px-[72px] border-b-1 border-slate-300 drop-shadow-2xl ">
 			<div className="flex flex-row mr-auto items-center basis-[20%]">
 				<img src="/MilestonesLogo.svg" />
 				<div className="text-[#1D4ED8] text-xl font-bold w-[120px]">
