@@ -1,5 +1,8 @@
 import React, { useState } from "react";
 import { SEModules } from "../../../../data/SEModules";
+import { IoSendSharp } from "react-icons/io5";
+import { ChatMap } from "../../../../data/ChatMap";
+import { MdOutlineScheduleSend } from "react-icons/md";
 
 const ModuleOne = () => {
 	const [selectedState, setSelectedState] = useState({
@@ -7,14 +10,39 @@ const ModuleOne = () => {
 		chapter: SEModules[0].chapters[0],
 	});
 
+	const [conversation, setConversation] = useState([]);
+	const [messageInput, setMessageInput] = useState("");
+	const [messageInputLoadingStatus, setMessageInputLoadingStatus] =
+		useState(false);
+
 	const [showStatus, setShowStatus] = useState({
 		moduleContainer: true,
 		expandedModule: true,
 		chatContainer: true,
 	});
 
-	console.log(selectedState.chapter);
-	console.log(selectedState.module);
+	const getResponse = (message) => {
+		const foundMsgStored = ChatMap.find((chat) => chat.user === message);
+		console.log(foundMsgStored);
+		let response = foundMsgStored
+			? foundMsgStored.miles
+			: "Message is not found, no replies.";
+		return response;
+	};
+
+	const sendMessage = (message) => {
+		setMessageInput(message);
+		setMessageInputLoadingStatus(true); // Set true immediately
+
+		setTimeout(() => {
+			const response = getResponse(message);
+			setMessageInputLoadingStatus(false);
+			setMessageInput("");
+			setConversation((prev) =>
+				prev.concat({ user: message, miles: response })
+			);
+		}, 5000); // This keeps it true for 5s
+	};
 
 	const setSelectedChapter = (chapter) => {
 		return setSelectedState((prev) => ({
@@ -37,11 +65,13 @@ const ModuleOne = () => {
 		toggleHideExpandedModule();
 	};
 
-	const toggleHideExpandedModule = () =>
+	const toggleHideExpandedModule = () => {
+		console.log(showStatus.expandedModule);
 		setShowStatus((prev) => ({
 			...prev,
 			expandedModule: !prev.expandedModule,
 		}));
+	};
 
 	const toggleHideModuleContainer = () =>
 		setShowStatus((prev) => ({
@@ -59,7 +89,7 @@ const ModuleOne = () => {
 			{/* Above is outer container  */}
 			{showStatus.moduleContainer && (
 				<div
-					className={`flex flex-col basis-[15%] bg-white border-r-1 border-slate-300 }`}
+					className={`flex flex-col basis-[15%] bg-white border-r-1  border-slate-300 }`}
 				>
 					{/* Above is chapter listing container  */}
 					<div className="flex flex-row justify-between font-semibold text-lg p-[20px]">
@@ -109,7 +139,7 @@ const ModuleOne = () => {
 
 			{!showStatus.moduleContainer && (
 				<button
-					className="fixed left-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-[70px] h-[70px] bg-white border border-gray-300 shadow-lg rounded-r-full text-gray-600 hover:bg-gray-100 hover:text-gray-800 active:scale-95 transition-all duration-300"
+					className="fixed left-0  top-1/2 -translate-y-1/2 flex items-center justify-center w-[70px] h-[70px] bg-white border border-gray-300 shadow-lg rounded-r-full text-gray-600 hover:bg-gray-100 hover:text-gray-800 active:scale-95 transition-all duration-300"
 					onClick={toggleHideModuleContainer}
 				>
 					<span className="text-3xl font-bold">&gt;</span>
@@ -118,7 +148,7 @@ const ModuleOne = () => {
 
 			<div
 				className={`flex flex-col gap-[48px] flex-1 px-[36px] py-[24px] my-[18px] border border-[#CBD5E1] bg-white ${
-					showStatus.moduleContainer ? "" : "ml-[10px]"
+					showStatus.moduleContainer ? "" : "ml-[18px]"
 				}`}
 			>
 				{/* Above is course container*/}
@@ -210,23 +240,95 @@ const ModuleOne = () => {
 
 			{showStatus.chatContainer && (
 				<div
-					className={`flex flex-col  border-l-1 border-slate-300  ${
-						showStatus.moduleContainer ? "basis-[15%]" : "basis-[30%]"
-					}`}
+					className={`flex flex-col border-l-1 sticky  right-0 top-0 border-slate-300 h-screen 
+						${showStatus.moduleContainer ? "w-[15%]" : "w-[30%]"}`}
 				>
-					<div className="flex flex-row gap-[10px] p-[16px] items-center border-b-1 bg-white border-slate-300 justify-between">
-						<div className="font-semibold text-xl flex items-center justify-center text-[#1E3A8A] justify-self-center ">
+					{/* Header (Fixed) */}
+					<div className="flex flex-row gap-[10px] p-[16px] items-center border-b-1 bg-white border-slate-300 justify-between sticky top-0">
+						<div className="font-semibold text-xl flex items-center justify-center text-[#1E3A8A]">
 							Miles Chat
 						</div>
 						<div
-							className="text-xl font-semibold"
+							className="text-xl font-semibold cursor-pointer"
 							onClick={toggleHideChatContainer}
 						>
 							X
 						</div>
 					</div>
+
+					{/* Chat Messages (Scrollable) */}
+					<div className="bg-[#DBEAFE] flex flex-col py-[24px] px-[12px] gap-[12px] flex-1 overflow-auto">
+						<div className="flex flex-col gap-[4px] ">
+							<div className="text-[#64748B] mr-auto font-semibold">
+								Miles 🤖
+							</div>
+							<div className="bg-white rounded-xl px-[12px] py-[16px]">
+								Hello KWLim! Great to see you here!
+							</div>
+						</div>
+						{
+							conversation.length > 0 &&
+								conversation.map((chat) => (
+									<>
+										<div className="flex flex-col ml-auto gap-[4px] ">
+											<div className="text-[#64748B] ml-auto font-semibold ">
+												👤 KWLim
+											</div>
+											<div className="bg-[#93C5FD] rounded-xl px-[12px] py-[16px]">
+												{chat.user}
+											</div>
+										</div>
+
+										<div className="flex flex-col gap-[4px]">
+											<div className="text-[#64748B] mr-auto font-semibold">
+												Miles 🤖
+											</div>
+											<div className="bg-white rounded-xl px-[12px] py-[16px]">
+												{chat.miles}
+											</div>
+										</div>
+									</>
+								)) //If it is user, map this style, if it is miles, map that style
+						}
+					</div>
+
+					{/* Chat Input (Fixed at Bottom) */}
+					<div
+						className={` flex flex-row bg-[#DBEAFE]
+						items-center py-[16px] overflow-auto text-wrap px-[12px] justify-between sticky bottom-0`}
+					>
+						<div
+							className={`flex flex-row  rounded-full  justify-between px-[24px] py-[16px] items-center w-full gap-5 ${
+								messageInputLoadingStatus ? "bg-slate-300" : "bg-white"
+							} }`}
+						>
+							<input
+								placeholder={
+									messageInputLoadingStatus
+										? "Sending message..."
+										: "Ask Anything!"
+								}
+								className="focus:outline-none overflow-y-auto text-wrap"
+								disabled={messageInputLoadingStatus}
+								onChange={(e) => {
+									setMessageInput(e.target.value);
+								}}
+								value={messageInput}
+							/>
+							{!messageInputLoadingStatus && (
+								<IoSendSharp
+									className="hover:cursor-pointer"
+									onClick={(e) => {
+										e.preventDefault();
+										sendMessage(messageInput);
+									}}
+								/>
+							)}
+						</div>
+					</div>
 				</div>
 			)}
+
 			{!showStatus.chatContainer && (
 				<button
 					className="fixed right-0 top-1/2 -translate-y-1/2 flex items-center justify-center w-[70px] rounded-l-full h-[70px] shadow-lg  text-gray-600 hover:bg-gray-100 hover:text-gray-800 active:scale-95 transition-all duration-300"
@@ -234,7 +336,7 @@ const ModuleOne = () => {
 				>
 					<img
 						src="/ChatBotIcon.png"
-						className="bg-[#3B82F6] rounded-l-full object-fill object-bottom "
+						className="bg-[#3B82F6] rounded-l-full object-fill object-bottom"
 					/>
 				</button>
 			)}
