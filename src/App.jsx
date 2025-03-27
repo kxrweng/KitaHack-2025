@@ -9,7 +9,8 @@ import AuthUserLanding from "./pages/Upskill/Landing";
 import AuthUserLayout from "./layouts/AuthUserLayout";
 import InterviewPracticeLanding from "./pages/InterviewPractice/Landing";
 import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
-import AppliedTask from "./pages/AppliedTask"
+import AppliedTask from "./pages/Upskill/AppliedTask"
+import AppliedScenario from "./pages/Upskill/AppliedScenario"
 
 import { Navigate } from "react-router-dom";
 
@@ -68,7 +69,14 @@ const App = () => {
 					/>
 
 					<Route 
-						path ="applied_task" element = {<AppliedTask/>}></Route>
+						path ="applied_task" 
+						element = {<AppliedTask />}
+					/>
+					<Route 
+						path ="applied_scenario" 
+						element = {<AppliedScenario />}
+					/>
+						
 				</Route>
 			</Routes>
 		</BrowserRouter>

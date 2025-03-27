@@ -1,13 +1,13 @@
 import React, { useState } from "react";
-import desktopImage from "../assets/desktop.jpg";
-import ssmsLogo from "../assets/ssmslogo.webp";
-import mysqlLogo from "../assets/mysqllogo.svg";
-import mongodbLogo from "../assets/mongodblogo.png";
-import db_connect from "../assets/applied_db_connect.png";
-import db_launch from "../assets/applied_db_launch.png";
-import db_code_1 from "../assets/applied_db_code_1.png";
-import db_code_2 from "../assets/applied_db_code_2.png";
-import db_code_3 from "../assets/applied_db_code_3.png";
+import desktopImage from "/src/assets/desktop.jpg";
+import ssmsLogo from "/src/assets/ssmslogo.webp";
+import mysqlLogo from "/src/assets/mysqllogo.svg";
+import mongodbLogo from "/src/assets/mongodblogo.png";
+import db_connect from "/src/assets/applied_db_connect.png";
+import db_launch from "/src/assets/applied_db_launch.png";
+import db_code_1 from "/src/assets/applied_db_code_1.png";
+import db_code_2 from "/src/assets/applied_db_code_2.png";
+import db_code_3 from "/src/assets/applied_db_code_3.png";
 
 const AppliedTask = () => {
   const [screen, setScreen] = useState(-1); // Start screen by default
@@ -180,8 +180,9 @@ const AppliedTask = () => {
         </div>
       )}
       <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 bg-white bg-opacity-70 text-black p-4 rounded-lg text-sm shadow-md text-center w-auto">
-        {/* Handle Screen 4 Hint */}
-        {screen === 4 ? (
+        {screen === 3 ? (
+          <div>Select all records from the LOAN table.</div>
+        ) : screen === 4 ? (
           <div>Great! Now SELECT all books with the genre 'Lifestyle' from the BOOK table.</div>
         ) : screen === 5 ? (
           <div>There are 2 books with this book genre. Click anywhere to continue.</div>
