@@ -15,7 +15,6 @@ const ModuleOne = () => {
 	const [messageInput, setMessageInput] = useState("");
 	const [messageInputLoadingStatus, setMessageInputLoadingStatus] =
 		useState(false);
-	const [response, setResponse] = useState({});
 
 	const [showStatus, setShowStatus] = useState({
 		moduleContainer: true,
@@ -39,7 +38,6 @@ const ModuleOne = () => {
 		const response = await chat.sendMessage({
 			message,
 		});
-		setResponse(response);
 		return response;
 	};
 
