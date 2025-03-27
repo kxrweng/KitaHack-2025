@@ -1,10 +1,11 @@
 import React, { useState } from "react";
 import { SEModules } from "../../../../data/SEModules";
 import { IoSendSharp } from "react-icons/io5";
-import { ChatMap } from "../../../../data/ChatMap";
-import { MdOutlineScheduleSend } from "react-icons/md";
+import { GoogleGenAI } from "@google/genai";
 
 const ModuleOne = () => {
+	const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+
 	const [selectedState, setSelectedState] = useState({
 		module: SEModules[0],
 		chapter: SEModules[0].chapters[0],
@@ -14,6 +15,7 @@ const ModuleOne = () => {
 	const [messageInput, setMessageInput] = useState("");
 	const [messageInputLoadingStatus, setMessageInputLoadingStatus] =
 		useState(false);
+	const [response, setResponse] = useState({});
 
 	const [showStatus, setShowStatus] = useState({
 		moduleContainer: true,
@@ -21,27 +23,51 @@ const ModuleOne = () => {
 		chatContainer: true,
 	});
 
-	const getResponse = (message) => {
-		const foundMsgStored = ChatMap.find((chat) => chat.user === message);
-		console.log(foundMsgStored);
-		let response = foundMsgStored
-			? foundMsgStored.miles
-			: "Message is not found, no replies.";
+	const chat = ai.chats.create({
+		model: "gemini-1.5-flash-8b",
+		history: conversation,
+		config: {
+			maxOutputTokens: 50,
+			candidateCount: 1,
+			temperature: 0.1,
+			systemInstruction:
+				"Give brief,concise answers paragraphically. No point forms",
+		},
+	});
+
+	const getResponse = async (message) => {
+		const response = await chat.sendMessage({
+			message,
+		});
+		setResponse(response);
 		return response;
 	};
 
-	const sendMessage = (message) => {
+	const handleSendMessage = async (message) => {
 		setMessageInput(message);
-		setMessageInputLoadingStatus(true); // Set true immediately
+		setMessageInputLoadingStatus(true);
 
-		setTimeout(() => {
-			const response = getResponse(message);
-			setMessageInputLoadingStatus(false);
+		try {
+			const response = await getResponse(message);
+			const responseText = response.text;
+
+			const userPart = { role: "user", parts: [{ text: message }] };
+			const modelPart = { role: "model", parts: [{ text: responseText }] };
+
+			setConversation((prev) => {
+				const updatedConversation = [...prev, userPart, modelPart];
+				localStorage.setItem(
+					"chatHistory",
+					JSON.stringify(updatedConversation)
+				);
+				return updatedConversation;
+			});
+		} catch (error) {
+			console.log(error);
+		} finally {
 			setMessageInput("");
-			setConversation((prev) =>
-				prev.concat({ user: message, miles: response })
-			);
-		}, 5000); // This keeps it true for 5s
+			setMessageInputLoadingStatus(false);
+		}
 	};
 
 	const setSelectedChapter = (chapter) => {
@@ -66,7 +92,6 @@ const ModuleOne = () => {
 	};
 
 	const toggleHideExpandedModule = () => {
-		console.log(showStatus.expandedModule);
 		setShowStatus((prev) => ({
 			...prev,
 			expandedModule: !prev.expandedModule,
@@ -117,8 +142,9 @@ const ModuleOne = () => {
 								</div>
 								{showStatus.expandedModule && (
 									<div className="flex flex-col w-full  ">
-										{module.chapters.map((chapter) => (
+										{module.chapters.map((chapter, index) => (
 											<div
+												key={index}
 												className={`flex py-[20px] px-[48px] ${
 													selectedState.chapter === chapter
 														? "text-white bg-[#1D4ED8]"
@@ -270,23 +296,25 @@ const ModuleOne = () => {
 							conversation.length > 0 &&
 								conversation.map((chat) => (
 									<>
-										<div className="flex flex-col ml-auto gap-[4px] ">
-											<div className="text-[#64748B] ml-auto font-semibold ">
-												👤 KWLim
+										{chat.role === "user" ? (
+											<div className="flex flex-col ml-auto gap-[4px] ">
+												<div className="text-[#64748B] ml-auto font-semibold ">
+													👤 KWLim
+												</div>
+												<div className="bg-[#93C5FD] rounded-xl px-[12px] py-[16px]">
+													{chat.parts[0].text}
+												</div>
 											</div>
-											<div className="bg-[#93C5FD] rounded-xl px-[12px] py-[16px]">
-												{chat.user}
+										) : (
+											<div className="flex flex-col gap-[4px]">
+												<div className="text-[#64748B] mr-auto font-semibold">
+													Miles 🤖
+												</div>
+												<div className="bg-white rounded-xl px-[12px] py-[16px]">
+													{chat.parts[0].text}
+												</div>
 											</div>
-										</div>
-
-										<div className="flex flex-col gap-[4px]">
-											<div className="text-[#64748B] mr-auto font-semibold">
-												Miles 🤖
-											</div>
-											<div className="bg-white rounded-xl px-[12px] py-[16px]">
-												{chat.miles}
-											</div>
-										</div>
+										)}
 									</>
 								)) //If it is user, map this style, if it is miles, map that style
 						}
@@ -308,7 +336,7 @@ const ModuleOne = () => {
 										? "Sending message..."
 										: "Ask Anything!"
 								}
-								className="focus:outline-none overflow-y-auto text-wrap"
+								className="focus:outline-none w-full overflow-y-auto text-wrap"
 								disabled={messageInputLoadingStatus}
 								onChange={(e) => {
 									setMessageInput(e.target.value);
@@ -320,7 +348,7 @@ const ModuleOne = () => {
 									className="hover:cursor-pointer"
 									onClick={(e) => {
 										e.preventDefault();
-										sendMessage(messageInput);
+										handleSendMessage(messageInput);
 									}}
 								/>
 							)}
