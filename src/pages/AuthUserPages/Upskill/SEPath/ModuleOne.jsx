@@ -4,23 +4,32 @@ import { IoSendSharp } from "react-icons/io5";
 import { GoogleGenAI } from "@google/genai";
 
 const ModuleOne = () => {
+	const stringifiedChatHistory = localStorage.getItem("chatHistory");
+
 	const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 	const [selectedState, setSelectedState] = useState({
 		module: SEModules[0],
 		chapter: SEModules[0].chapters[0],
 	});
+	// const [conversation, setConversation] = useState(
+	// 	JSON.parse(localStorage.getItem("chatHistory") || [])
+	// );
 
-	const [conversation, setConversation] = useState([]);
+	const [conversation, setConversation] = useState(
+		stringifiedChatHistory ? JSON.parse(stringifiedChatHistory) : []
+	);
 	const [messageInput, setMessageInput] = useState("");
 	const [messageInputLoadingStatus, setMessageInputLoadingStatus] =
 		useState(false);
 
 	const [showStatus, setShowStatus] = useState({
 		moduleContainer: true,
-		expandedModule: true,
+		expandedModule: SEModules[0],
 		chatContainer: true,
 	});
+
+	console.log(conversation);
 
 	const chat = ai.chats.create({
 		model: "gemini-1.5-flash-8b",
@@ -35,10 +44,8 @@ const ModuleOne = () => {
 	});
 
 	const getResponse = async (message) => {
-		const response = await chat.sendMessage({
-			message,
-		});
-		return response;
+		console.log("getResponse called with:", message);
+		await chat.sendMessage({ message });
 	};
 
 	const handleSendMessage = async (message) => {
@@ -46,20 +53,8 @@ const ModuleOne = () => {
 		setMessageInputLoadingStatus(true);
 
 		try {
-			const response = await getResponse(message);
-			const responseText = response.text;
-
-			const userPart = { role: "user", parts: [{ text: message }] };
-			const modelPart = { role: "model", parts: [{ text: responseText }] };
-
-			setConversation((prev) => {
-				const updatedConversation = [...prev, userPart, modelPart];
-				localStorage.setItem(
-					"chatHistory",
-					JSON.stringify(updatedConversation)
-				);
-				return updatedConversation;
-			});
+			await getResponse(message);
+			localStorage.setItem("ChatHistory", conversation);
 		} catch (error) {
 			console.log(error);
 		} finally {
@@ -79,20 +74,18 @@ const ModuleOne = () => {
 			const moduleIndex = SEModules?.indexOf(module);
 			const chapter =
 				moduleIndex !== -1 ? SEModules[moduleIndex]?.chapters?.[0] : undefined;
-
 			return {
 				...prev,
 				module,
 				chapter,
 			};
 		});
-		toggleHideExpandedModule();
 	};
 
-	const toggleHideExpandedModule = () => {
+	const toggleHideExpandedModule = (module) => {
 		setShowStatus((prev) => ({
 			...prev,
-			expandedModule: !prev.expandedModule,
+			expandedModule: prev.expandedModule === module ? null : module,
 		}));
 	};
 
@@ -121,7 +114,7 @@ const ModuleOne = () => {
 					</div>
 					<div className="flex flex-col">
 						{SEModules.map((module) => (
-							<>
+							<div key={module.id}>
 								<div
 									className="flex flex-row justify-between pl-[36px] pr-[20px] py-[20px] font-semibold"
 									key={module.id}
@@ -131,14 +124,14 @@ const ModuleOne = () => {
 									<div
 										onClick={(e) => {
 											e.stopPropagation();
-											toggleHideExpandedModule();
+											toggleHideExpandedModule(module);
 										}}
 										className="hover:cursor-pointer"
 									>
-										{showStatus.expandedModule ? "\u2228" : "\u2227"}
+										{showStatus.expandedModule !== module ? "\u2228" : "\u2227"}
 									</div>
 								</div>
-								{showStatus.expandedModule && (
+								{showStatus.expandedModule === module && (
 									<div className="flex flex-col w-full  ">
 										{module.chapters.map((chapter, index) => (
 											<div
@@ -155,7 +148,7 @@ const ModuleOne = () => {
 										))}
 									</div>
 								)}
-							</>
+							</div>
 						))}
 					</div>
 				</div>
@@ -216,8 +209,11 @@ const ModuleOne = () => {
 										}. ${content.title}`}</div>
 
 										<ul className="list-item mt-[5px]">
-											{content.points.map((point) => (
-												<li className="list-disc list-inside mt-[3px]">
+											{content.points.map((point, index) => (
+												<li
+													key={index}
+													className="list-disc list-inside mt-[3px]"
+												>
 													{point}
 												</li>
 											))}

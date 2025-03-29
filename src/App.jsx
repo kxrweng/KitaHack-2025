@@ -11,7 +11,7 @@ import InterviewPracticeLanding from "./pages/AuthUserPages/InterviewPractice/La
 import ResumeBuilderLanding from "./pages/AuthUserPages/ResumeBuilder/Landing";
 import Applied from "./pages/Applied";
 import SoftwareEngineerModuleOne from "./pages/AuthUserPages/Upskill/SEPath/ModuleOne";
-
+import ResumeDetails from "./pages/AuthUserPages/ResumeBuilder/Details";
 import SoftwareEngineerPath from "./pages/AuthUserPages/Upskill/SEPath/SoftwareEngineerPath";
 
 import { Navigate } from "react-router-dom";
@@ -75,6 +75,10 @@ const App = () => {
 					<Route
 						path="resume_builder"
 						element={<ResumeBuilderLanding />}
+					/>
+					<Route
+						path="resume_builder/build/details"
+						element={<ResumeDetails />}
 					/>
 					<Route
 						path="applied"
