@@ -5,7 +5,9 @@ import { GoogleGenAI } from "@google/genai";
 
 const ModuleOne = () => {
 	const stringifiedChatHistory = localStorage.getItem("chatHistory");
-
+	// const faultyStringChatHistory = localStorage.getItem("faultyChatHistory");
+	// console.log(faultyStringChatHistory);
+	// console.log(stringifiedChatHistory);
 	const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
 
 	const [selectedState, setSelectedState] = useState({
@@ -18,6 +20,7 @@ const ModuleOne = () => {
 
 	const [conversation, setConversation] = useState(
 		stringifiedChatHistory ? JSON.parse(stringifiedChatHistory) : []
+		// faultyStringChatHistory ? JSON.parse(faultyStringChatHistory) : []
 	);
 	const [messageInput, setMessageInput] = useState("");
 	const [messageInputLoadingStatus, setMessageInputLoadingStatus] =
@@ -30,6 +33,7 @@ const ModuleOne = () => {
 	});
 
 	console.log(conversation);
+	console.log(JSON.stringify(conversation));
 
 	const chat = ai.chats.create({
 		model: "gemini-1.5-flash-8b",
@@ -54,7 +58,10 @@ const ModuleOne = () => {
 
 		try {
 			await getResponse(message);
-			localStorage.setItem("ChatHistory", conversation);
+			const parsedConversation = JSON.stringify(conversation);
+			console.log(parsedConversation);
+			localStorage.setItem("chatHistory", parsedConversation);
+			// localStorage.setItem("faultyChatHistory", JSON.stringify(conversation));
 		} catch (error) {
 			console.log(error);
 		} finally {
