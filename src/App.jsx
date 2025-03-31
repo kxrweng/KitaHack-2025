@@ -11,6 +11,7 @@ import InterviewPracticeLayout from "./layouts/InterviewPracticeLayout";
 import InterviewPracticeLanding from "./pages/InterviewPractice/Landing";
 import MoreRoles from "./pages/InterviewPractice/MoreRoles";
 import Aspects from "./pages/InterviewPractice/Aspects";
+import MoreContext from "./pages/InterviewPractice/MoreContext";
 import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
 import AppliedTask from "./pages/Upskill/AppliedTask"
 import AppliedScenario from "./pages/Upskill/AppliedScenario"
@@ -77,6 +78,10 @@ const App = () => {
 						<Route
 							path="aspects"
 							element={<Aspects />}
+						/>
+						<Route
+							path="context"
+							element={<MoreContext />}
 						/>
 					</Route>
 
