@@ -16,25 +16,25 @@ const Landing = () => {
 					</div>
 					<ul className="flex flex-col gap-[12px] w-full">
 						<li className="flex px-[24px] py-[20px] text-white bg-blue-700 w-full justify-between text-[20px] rounded-lg">
-							<text>Software Engineer</text>
+							<p>Software Engineer</p>
 							<img src="/CheckCircleWhite.svg" />
 						</li>
 						<li className="flex px-[24px] py-[20px] text-gray-700 bg-blue-100 w-full justify-between text-[20px] rounded-lg">
-							<text>Project Manager</text>
+							<p>Project Manager</p>
 						</li>
 						<li className="flex px-[24px] py-[20px] text-gray-700 bg-slate-100 w-full justify-between text-[20px] rounded-lg">
-							<text>UI/UX Designer</text>
+							<p>UI/UX Designer</p>
 						</li>
 						<li className="flex px-[24px] py-[20px] text-gray-700 bg-blue-100 w-full justify-between text-[20px] rounded-lg">
-							<text>Quality Assurance Testerr</text>
+							<p>Quality Assurance Testerr</p>
 						</li>
 						<a className="text-blue-700 text-md cursor-pointer underline" onClick={navigateToMoreRoles}>Don't see your role?</a>
 					</ul>
 				</div>
 
-				<div className="bg-[#1D4ED8] items-center justify-center  text-white flex rounded-xl w-[120px] h-[50px] ml-auto">
+				<div className="w-full flex justify-end">
 					<button
-						className="text-xl py-1 hover:cursor-pointer"
+						className="bg-[#1D4ED8] text-white text-md py-[12px] px-[24px] rounded-lg hover:cursor-pointer text-md hover:cursor-pointer"
 						onClick={navigateToInterviewAspects}
 					>
 						Proceed

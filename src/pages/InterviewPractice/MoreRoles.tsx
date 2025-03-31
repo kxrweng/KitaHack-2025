@@ -26,17 +26,17 @@ const MoreRoles = () => {
 
 	return (
 		<div className="w-full flex flex-col justify-center items-center py-[48px]">
-			<div className="flex flex-col h-[680px] justify-between py-[48px] px-[64px] bg-white outline-slate-500 rounded-xl outline-1">
-                <div className="flex flex-col gap-[36px] justify-center items-center">
+			<div className="flex flex-col h-[673px] w-[775px] justify-between py-[48px] px-[64px] bg-white outline-slate-500 rounded-xl outline-1">
+                <div className="flex flex-col gap-[36px] justify-center items-center w-full">
                     <div className="text-blue-900 font-bold text-[32px]">Welcome to Interview Practice!</div>
 
-                    <div className="flex flex-col gap-[12px]">
-                        <div className="text-slate-700 font-semibold text-2xl">
+                    <div className="w-full flex flex-col gap-[12px]">
+                        <div className="text-center text-slate-700 font-semibold text-2xl">
                             Let's find the role which you are interviewing for:
                         </div>
-                        <div>
+                        <div className="w-inherit">
                             <input 
-                                className="bg-white px-[24px] py-[20px] w-full h-[56px] text-[20px] outline-slate-300 rounded-xl outline-1" 
+                                className="w-inherit bg-white px-[24px] py-[20px] w-full h-[56px] text-[20px] outline-slate-300 rounded-xl outline-1" 
                                 placeholder="Enter your role"
                                 onChange={handleChange}
                                 value={value}
@@ -62,15 +62,15 @@ const MoreRoles = () => {
                     </div>
                 </div>
 
-				<div className="flex flex-row justify-between">
+				<div className="flex justify-between">
                     <button
-						className="bg-transparent flex items-center justify-center text-blue-900 text-md py-[12px] px-[24px] rounded-lg outline-1 outline-blue-900 hover:cursor-pointer"
+						className="bg-transparent text-blue-900 text-md py-[12px] px-[24px] rounded-lg outline-1 outline-blue-900 hover:cursor-pointer"
 						onClick={navigateToInterviewLanding}
 					>
 						Previous
 					</button>
 					<button
-						className="bg-[#1D4ED8] flex items-center justify-center text-white text-md py-[12px] px-[24px] rounded-lg hover:cursor-pointer"
+						className="bg-[#1D4ED8] text-white text-md py-[12px] px-[24px] rounded-lg hover:cursor-pointer"
 						onClick={navigateToInterviewAspects}
 					>
 						Proceed

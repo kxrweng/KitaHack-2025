@@ -10,6 +10,7 @@ import AuthUserLayout from "./layouts/AuthUserLayout";
 import InterviewPracticeLayout from "./layouts/InterviewPracticeLayout";
 import InterviewPracticeLanding from "./pages/InterviewPractice/Landing";
 import MoreRoles from "./pages/InterviewPractice/MoreRoles";
+import Aspects from "./pages/InterviewPractice/Aspects";
 import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
 import AppliedTask from "./pages/Upskill/AppliedTask"
 import AppliedScenario from "./pages/Upskill/AppliedScenario"
@@ -69,10 +70,13 @@ const App = () => {
 							path=""
 							element={<InterviewPracticeLanding />}
 						/>
-
 						<Route
 							path="more_roles"
 							element={<MoreRoles />}
+						/>
+						<Route
+							path="aspects"
+							element={<Aspects />}
 						/>
 					</Route>
 
