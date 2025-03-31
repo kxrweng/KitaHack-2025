@@ -42,7 +42,7 @@ ORDER BY
   };
 
   return (
-    <div className="flex flex-col items-center min-h-screen p-6 bg-gray-100">
+    <div className="flex flex-col w-full items-center min-h-screen p-6 bg-gray-100">
       {/* Description and Problem Statement */}
       <div className="w-[900px] bg-white p-6 mb-4 shadow-lg rounded-lg text-gray-700">
         <h2 className="text-xl font-bold mb-2">Description:</h2>

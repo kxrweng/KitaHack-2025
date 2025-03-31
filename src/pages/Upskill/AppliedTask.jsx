@@ -52,7 +52,7 @@ const AppliedTask = () => {
 
   return (
     <div
-      className="flex flex-col items-center justify-center min-h-screen relative"
+      className="flex flex-col items-center w-full justify-center items-center min-h-screen relative"
       onClick={handleClick} // Click anywhere to proceed from screen 5 to 6
     >
       {screen === -1 ? (
@@ -179,26 +179,30 @@ const AppliedTask = () => {
           </div>
         </div>
       )}
-      <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 bg-white bg-opacity-70 text-black p-4 rounded-lg text-sm shadow-md text-center w-auto">
-        {screen === 3 ? (
-          <div>Select all records from the LOAN table.</div>
-        ) : screen === 4 ? (
-          <div>Great! Now SELECT all books with the genre 'Lifestyle' from the BOOK table.</div>
-        ) : screen === 5 ? (
-          <div>There are 2 books with this book genre. Click anywhere to continue.</div>
-        ) : feedback ? (
-          <div>{feedback}</div>
-        ) : (
-          // Display specific hint for screen 1, screen 2, and when the user isn't hovering
-          screen === 1 ? (
-            <div>Connect to the SQL Server.</div>
-          ) : screen === 2 && !hovering ? (
-            <div className="mt-2 text-black text-center">
-              This is the interface. Hover on different sections for more details. Click on anywhere to proceed.
-            </div>
-          ) : null
-        )}
-      </div>
+      {
+        screen > 0 ? 
+        <div className="absolute bottom-[-10px] left-1/2 transform -translate-x-1/2 bg-white bg-opacity-70 text-black p-4 rounded-lg text-sm shadow-md text-center w-auto">
+          {screen === 3 ? (
+            <div>Select all records from the LOAN table.</div>
+          ) : screen === 4 ? (
+            <div>Great! Now SELECT all books with the genre 'Lifestyle' from the BOOK table.</div>
+          ) : screen === 5 ? (
+            <div>There are 2 books with this book genre. Click anywhere to continue.</div>
+          ) : feedback ? (
+            <div>{feedback}</div>
+          ) : (
+            // Display specific hint for screen 1, screen 2, and when the user isn't hovering
+            screen === 1 ? (
+              <div>Connect to the SQL Server.</div>
+            ) : screen === 2 && !hovering ? (
+              <div className="mt-2 text-black text-center">
+                This is the interface. Hover on different sections for more details. Click on anywhere to proceed.
+              </div>
+            ) : null
+          )}
+        </div>
+        : <></>
+      }
     </div>
   );
 };
