@@ -7,7 +7,9 @@ import MbtiPersonalityCheck from "./pages/CalibrationAssessment/MbtiPersonalityC
 import NewUserLayout from "./layouts/NewUserLayout";
 import AuthUserLanding from "./pages/Upskill/Landing";
 import AuthUserLayout from "./layouts/AuthUserLayout";
+import InterviewPracticeLayout from "./layouts/InterviewPracticeLayout";
 import InterviewPracticeLanding from "./pages/InterviewPractice/Landing";
+import MoreRoles from "./pages/InterviewPractice/MoreRoles";
 import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
 import AppliedTask from "./pages/Upskill/AppliedTask"
 import AppliedScenario from "./pages/Upskill/AppliedScenario"
@@ -61,8 +63,19 @@ const App = () => {
 
 					<Route
 						path="interview_practice"
-						element={<InterviewPracticeLanding />}
-					/>
+						element={<InterviewPracticeLayout />}
+					>
+						<Route
+							path=""
+							element={<InterviewPracticeLanding />}
+						/>
+
+						<Route
+							path="more_roles"
+							element={<MoreRoles />}
+						/>
+					</Route>
+
 					<Route
 						path="resume_builder"
 						element={<ResumeBuilderLanding />}
