@@ -18,7 +18,7 @@ const ModuleOne = () => {
 	// 	JSON.parse(localStorage.getItem("chatHistory") || [])
 	// );
 
-	const [conversation, setConversation] = useState(
+	const [conversation, _setConversation] = useState(
 		stringifiedChatHistory ? JSON.parse(stringifiedChatHistory) : []
 		// faultyStringChatHistory ? JSON.parse(faultyStringChatHistory) : []
 	);
@@ -49,7 +49,9 @@ const ModuleOne = () => {
 
 	const getResponse = async (message) => {
 		console.log("getResponse called with:", message);
-		await chat.sendMessage({ message });
+		const response = await chat.sendMessage({ message });
+		console.log(response);
+		return response;
 	};
 
 	const handleSendMessage = async (message) => {
