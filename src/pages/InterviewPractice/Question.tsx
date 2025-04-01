@@ -78,19 +78,19 @@ const Question = () => {
 
                         <div className="w-full flex justify-end gap-[12px]">
                             <button
-                                className="bg-transparent text-blue-900 text-2xl py-[12px] px-[24px] rounded-lg outline-1 outline-blue-900 hover:cursor-pointer"
+                                className="bg-transparent text-blue-900 text-lg py-[12px] px-[24px] rounded-lg outline-1 outline-blue-900 hover:cursor-pointer"
                             >
                                 Skip Question                            
                             </button>
                             {isNextQuestion ? 
                                 <button
-                                    className="bg-[#1D4ED8] text-white text-2xl py-[12px] px-[24px] rounded-lg hover:cursor-pointer"
+                                    className="bg-[#1D4ED8] text-white text-lg py-[12px] px-[24px] rounded-lg hover:cursor-pointer"
                                     onClick={navigateToSummary}
                                 >
                                     Next Question
                                 </button> :
                                 <button
-                                    className="bg-[#1D4ED8] text-white text-2xl py-[12px] px-[24px] rounded-lg hover:cursor-pointer"
+                                    className="bg-[#1D4ED8] text-white text-lg py-[12px] px-[24px] rounded-lg hover:cursor-pointer"
                                     type="submit"
                                 >
                                     Check Solution

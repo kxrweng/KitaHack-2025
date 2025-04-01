@@ -13,6 +13,7 @@ import MoreRoles from "./pages/InterviewPractice/MoreRoles";
 import Aspects from "./pages/InterviewPractice/Aspects";
 import MoreContext from "./pages/InterviewPractice/MoreContext";
 import Question from "./pages/InterviewPractice/Question";
+import InterviewSummary from "./pages/InterviewPractice/InterviewSummary";
 import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
 import AppliedTask from "./pages/Upskill/AppliedTask"
 import AppliedScenario from "./pages/Upskill/AppliedScenario"
@@ -87,6 +88,10 @@ const App = () => {
 						<Route
 							path="question"
 							element={<Question />}
+						/>
+						<Route
+							path="summary"
+							element={<InterviewSummary />}
 						/>
 					</Route>
 

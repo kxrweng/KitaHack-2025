@@ -26,7 +26,7 @@ const Landing = () => {
 							<p>UI/UX Designer</p>
 						</li>
 						<li className="flex px-[24px] py-[20px] text-gray-700 bg-blue-100 w-full justify-between text-[20px] rounded-lg">
-							<p>Quality Assurance Testerr</p>
+							<p>Quality Assurance Tester</p>
 						</li>
 						<a className="text-blue-700 text-md cursor-pointer underline" onClick={navigateToMoreRoles}>Don't see your role?</a>
 					</ul>
