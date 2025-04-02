@@ -17,6 +17,7 @@ import InterviewSummary from "./pages/InterviewPractice/InterviewSummary";
 import ResumeBuilderLanding from "./pages/ResumeBuilder/Landing";
 import AppliedTask from "./pages/Upskill/AppliedTask"
 import AppliedScenario from "./pages/Upskill/AppliedScenario"
+import Account from "./pages/Account/Account";
 
 import { Navigate } from "react-router-dom";
 
@@ -107,6 +108,11 @@ const App = () => {
 					<Route 
 						path ="applied_scenario" 
 						element = {<AppliedScenario />}
+					/>
+
+					<Route 
+						path ="account" 
+						element = {<Account />}
 					/>
 						
 				</Route>
