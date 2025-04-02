@@ -61,7 +61,7 @@ const Question = () => {
                     ref={formRef}
                     onSubmit={handleSubmit}>
                         <div className="flex flex-col gap-[8px] ">
-                            <div className="text-[#1E3A8A] font-bold text-lg">Your Age</div>
+                            <div className="text-[#1E3A8A] font-bold text-lg">Your Answer</div>
                             <div className="flex bg-white h-[144px] p-4 outline-slate-300 rounded-xl outline-1">
                                 <textarea 
                                     className="text-xl w-full focus:outline-none" 
