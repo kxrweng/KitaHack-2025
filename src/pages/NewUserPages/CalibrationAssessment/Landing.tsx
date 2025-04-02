@@ -1,12 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
-import useUserContext from '../../../hooks/useUserContext';
+import useGlobalContext from '../../../hooks/useGlobalContext';
 const Introduction = () => {
-  const { user, setUser } = useUserContext();
+  const { user, setUser } = useGlobalContext();
   console.log(user);
 
   const handleInputChange = (e) => {
-    console.log(e.target.id);
     setUser((prev) => ({ ...prev, [e.target.id]: e.target.value }));
   };
 
@@ -48,7 +47,7 @@ const Introduction = () => {
 
               <input
                 id='age'
-                value={user.age}
+                // value={user.age}
                 onChange={(e) => handleInputChange(e)}
                 className='bg-white p-4 w-[280px] h-[56px] outline-slate-300 rounded-xl outline-1'
               />
@@ -61,7 +60,8 @@ const Introduction = () => {
 
               <select
                 id='gender'
-                value={user.gender}
+                // value={user.gender}
+                defaultValue={'Female'}
                 onChange={(e) => handleInputChange(e)}
                 className='bg-white p-4 w-[280px] h-[56px] outline-slate-300 rounded-xl outline-1'>
                 <option value='Female'>Female</option>
@@ -77,7 +77,8 @@ const Introduction = () => {
 
             <select
               id='currentField'
-              value={user.currentField}
+              // value={user.currentField}
+              defaultValue='DataScience'
               onChange={(e) => handleInputChange(e)}
               className='bg-white p-4 w-[280px] h-[56px] outline-slate-300 rounded-xl outline-1'>
               <option value='SoftwareEngineering'>Software Engineering</option>

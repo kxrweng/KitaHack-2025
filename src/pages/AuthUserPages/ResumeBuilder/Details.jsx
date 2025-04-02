@@ -1,18 +1,21 @@
 import React, { useState } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router';
-
+import useGlobalContext from '../../../hooks/useGlobalContext';
 const ResumeDetails = () => {
+  const { user, setUser } = useGlobalContext();
+  console.log(user);
   const navigate = useNavigate();
   const [userInfo, setUserInfo] = useState({
     name: '',
-    currentOccupation: '',
-    aspiredOccupation: '',
+    currentRole: '',
+    appliedRole: '',
     email: '',
     phoneNumber: '',
-    websiteLink: '',
-    objective: '',
+    website: '',
+    introduction: '',
     education: [],
+    skills: [],
   });
 
   const [tempEduInfo, setTempEduInfo] = useState({
@@ -118,6 +121,12 @@ const ResumeDetails = () => {
   };
 
   const handleNext = () => {
+    //map userInfo into user
+    setUser(() => ({
+      ...userInfo,
+      education: [...userInfo.education],
+      skills: [...userInfo.skills],
+    }));
     navigate('/auth_user/resume_builder/build/skills');
   };
 
@@ -148,9 +157,9 @@ const ResumeDetails = () => {
                 />
                 <input
                   placeholder='Current Occupation'
-                  name='currentOccupation'
+                  name='currentRole'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                  value={userInfo.currentOccupation}
+                  value={userInfo.currentRole}
                   onChange={(e) => handleChange(e)}
                 />{' '}
               </div>
@@ -158,8 +167,8 @@ const ResumeDetails = () => {
                 <input
                   placeholder='Aspired Occupation'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                  name='aspiredOccupation'
-                  value={userInfo.aspiredOccupation}
+                  name='appliedRole'
+                  value={userInfo.appliedRole}
                   onChange={(e) => handleChange(e)}
                 />{' '}
               </div>
@@ -191,8 +200,8 @@ const ResumeDetails = () => {
                 <input
                   placeholder='Website / LinkedIn URL'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                  name='websiteLink'
-                  value={userInfo.websiteLink}
+                  name='website'
+                  value={userInfo.website}
                   onChange={(e) => handleChange(e)}
                 />{' '}
               </div>

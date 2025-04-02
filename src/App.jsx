@@ -9,19 +9,19 @@ import Pathways from './pages/AuthUserPages/Upskill/Landing';
 import AuthUserLayout from './layouts/AuthUserLayout';
 import InterviewPracticeLayout from './layouts/InterviewPracticeLayout';
 import InterviewPracticeLanding from './pages/AuthUserPages/InterviewPractice/Landing';
-import MoreRoles from './pages/InterviewPractice/MoreRoles';
-import Aspects from './pages/InterviewPractice/Aspects';
-import MoreContext from './pages/InterviewPractice/MoreContext';
-import Question from './pages/InterviewPractice/Question';
-import InterviewSummary from './pages/InterviewPractice/InterviewSummary';
+import MoreRoles from './pages/AuthUserPages/InterviewPractice/MoreRoles';
+import Aspects from './pages/AuthUserPages/InterviewPractice/Aspects';
+import MoreContext from './pages/AuthUserPages/InterviewPractice/MoreContext';
+import Question from './pages/AuthUserPages/InterviewPractice/Question';
+import InterviewSummary from './pages/AuthUserPages/InterviewPractice/InterviewSummary';
 import ResumeBuilderLanding from './pages/AuthUserPages/ResumeBuilder/Landing';
-import Applied from './pages/Applied';
+// import Applied from './pages/Applied';
 import SoftwareEngineerModuleOne from './pages/AuthUserPages/Upskill/SEPath/ModuleOne';
 import ResumeDetails from './pages/AuthUserPages/ResumeBuilder/Details';
 import SoftwareEngineerPath from './pages/AuthUserPages/Upskill/SEPath/SoftwareEngineerPath';
 import Skills from './pages/AuthUserPages/ResumeBuilder/Skills';
-import AppliedTask from './pages/Upskill/AppliedTask';
-import AppliedScenario from './pages/Upskill/AppliedScenario';
+import AppliedTask from './pages/AuthUserPages/Upskill/AppliedTask';
+import AppliedScenario from './pages/AuthUserPages/Upskill/AppliedScenario';
 
 import { Navigate } from 'react-router-dom';
 import Experience from './pages/AuthUserPages/ResumeBuilder/Experience';
@@ -121,10 +121,6 @@ const App = () => {
           <Route
             path='resume_builder/build/experience'
             element={<Experience />}
-          />
-          <Route
-            path='applied'
-            element={<Applied />}
           />
 
           <Route

@@ -1,13 +1,4 @@
-import React from 'react';
-import { UserProvider } from './UserProvider';
-import { ResumeProvider } from './ResumeProvider';
+// /src/utils/GlobalContext.js
+import { createContext } from 'react';
 
-const GlobalContext = ({ children }) => {
-  return (
-    <UserProvider>
-      <ResumeProvider>{children}</ResumeProvider>
-    </UserProvider>
-  );
-};
-
-export default GlobalContext;
+export const GlobalContext = createContext();

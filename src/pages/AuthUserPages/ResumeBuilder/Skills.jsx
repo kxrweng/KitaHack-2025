@@ -1,9 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router';
+import useGlobalContext from '../../../hooks/useGlobalContext';
 
 const Skills = () => {
   const navigate = useNavigate();
-
+  const { user, setUser } = useGlobalContext();
+  console.log(user);
   const [recommendedSkills, setRecommendedSkills] = useState([
     'Node.js',
     'Next.js',
@@ -26,6 +28,9 @@ const Skills = () => {
   };
 
   const handleNext = () => {
+    setUser((prev) => {
+      return { ...prev, skills: [...recommendedSkills] };
+    });
     navigate('/auth_user/resume_builder/build/experience');
   };
 
