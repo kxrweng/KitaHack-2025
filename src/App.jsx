@@ -7,7 +7,13 @@ import MbtiPersonalityCheck from './pages/NewUserPages/CalibrationAssessment/Mbt
 import NewUserLayout from './layouts/NewUserLayout';
 import Pathways from './pages/AuthUserPages/Upskill/Landing';
 import AuthUserLayout from './layouts/AuthUserLayout';
+import InterviewPracticeLayout from './layouts/InterviewPracticeLayout';
 import InterviewPracticeLanding from './pages/AuthUserPages/InterviewPractice/Landing';
+import MoreRoles from './pages/InterviewPractice/MoreRoles';
+import Aspects from './pages/InterviewPractice/Aspects';
+import MoreContext from './pages/InterviewPractice/MoreContext';
+import Question from './pages/InterviewPractice/Question';
+import InterviewSummary from './pages/InterviewPractice/InterviewSummary';
 import ResumeBuilderLanding from './pages/AuthUserPages/ResumeBuilder/Landing';
 import Applied from './pages/Applied';
 import SoftwareEngineerModuleOne from './pages/AuthUserPages/Upskill/SEPath/ModuleOne';
@@ -72,8 +78,33 @@ const App = () => {
           />
           <Route
             path='interview_practice'
-            element={<InterviewPracticeLanding />}
-          />
+            element={<InterviewPracticeLayout />}>
+            <Route
+              path=''
+              element={<InterviewPracticeLanding />}
+            />
+            <Route
+              path='more_roles'
+              element={<MoreRoles />}
+            />
+            <Route
+              path='aspects'
+              element={<Aspects />}
+            />
+            <Route
+              path='context'
+              element={<MoreContext />}
+            />
+            <Route
+              path='question'
+              element={<Question />}
+            />
+            <Route
+              path='summary'
+              element={<InterviewSummary />}
+            />
+          </Route>
+
           <Route
             path='resume_builder'
             element={<ResumeBuilderLanding />}
