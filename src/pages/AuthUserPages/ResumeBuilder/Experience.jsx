@@ -1,8 +1,11 @@
 import React, { useState } from 'react';
 import ExperienceInput from '../../../components/AuthUserComponents/ResumeBuilder/ExperienceInput';
+import { useNavigate } from 'react-router';
 import DisplayCard from '../../../components/AuthUserComponents/ResumeBuilder/DisplayCard';
 const Experience = () => {
   //#F1F5F9 for even, #DBEAFE for odd
+  const navigate = useNavigate();
+
   const [experiences, setExperiences] = useState([
     {
       role: 'Software Engineer Intern',
@@ -31,9 +34,13 @@ const Experience = () => {
   const handleSaveChanges = () => {
     console.log('handleSaveChanges');
   };
+
+  const handleGenerateResume = () => {
+    console.log('HandleGenerateResume clicked!');
+  };
   return (
     <div className='flex flex-row gap-[18px] w-full'>
-      <div className='flex flex-col flex-1 pl-[72px] pt-[36px] gap-[36px]'>
+      <div className='flex flex-col flex-1 pl-[72px] py-[36px] gap-[36px]'>
         <div className='text-[#1E3A8A] font-semibold text-xl'>
           Build your Resume
         </div>
@@ -64,6 +71,23 @@ const Experience = () => {
             </div>
           )}
         </div>
+        <div className='flex flex-row justify-between'>
+          <div
+            className='border-[#1E3A8A] border rounded-lg px-[24px] py-[12px] text-[#1E3A8A] text-xl hover:cursor-pointer'
+            onClick={() => navigate(-1)}>
+            Previous
+          </div>{' '}
+          <div className='flex flex-row gap-[10px]'>
+            <div className='border-[#1E3A8A] border rounded-lg px-[24px] py-[12px] text-[#1E3A8A] text-xl hover:cursor-pointer'>
+              Get Feedback
+            </div>{' '}
+            <div
+              className='border rounded-lg px-[24px] py-[12px] bg-[#1D4ED8] text-white hover:cursor-pointer text-xl'
+              onClick={handleGenerateResume}>
+              Generate Resume
+            </div>{' '}
+          </div>
+        </div>{' '}
       </div>
       <div className='flex flex-col w-[30%] border sticky  right-0 top-0'>
         <div>Chatbot here</div>
