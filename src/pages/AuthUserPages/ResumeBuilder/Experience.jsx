@@ -6,14 +6,7 @@ import { v4 as uuidv4 } from 'uuid';
 const Experience = () => {
   const { user, setUser } = useGlobalContext();
   const navigate = useNavigate();
-  // const [showExperiences, setShowExperiences] = useState(false);
-  // const [expEditMode, setExpEditMode] = useState(false);
-  // const [showProjects, setShowProjects] = useState(false);
-  // const [projectsEditMode, setProjectsEditMode] = useState(false);
-  // const [currentExpUuid, setCurrentExpUuid] = useState(null);
-  // const [currentProjectUuid, setCurrentProjectUuid] = useState(null);
-  // const [addMoreExp, setAddMoreExp] = useState(false);
-  // const [addMoreProjects, setAddMoreProjects] = useState(false);
+
   const [tempExp, setTempExp] = useState({
     role: '',
     location: '',
@@ -21,15 +14,24 @@ const Experience = () => {
     description: '',
   });
 
-  const [editMode, setEditMode] = useState(true); //This is the input field status
+  const [tempProject, setTempProject] = useState({
+    name: '',
+    link: '',
+    duration: '',
+    description: '',
+  });
+
+  const [expEditMode, setExpEditMode] = useState(true); //This is the input field status
+  const [projectEditMode, setProjectEditMode] = useState(true);
   const [currentExpUuid, setCurrentExpUuid] = useState(null);
+  const [currentProjectUuid, setCurrentProjectUuid] = useState(null);
   const handleExpChange = (e) =>
     setTempExp((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 
-  console.log(tempExp);
-  console.log(user);
-  console.log(editMode);
-  console.log(currentExpUuid);
+  console.log(currentProjectUuid);
+  console.log(projectEditMode);
+  const handleProjectChange = (e) =>
+    setTempProject((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 
   const handleGenerateResume = () => {
     console.log('HandleGenerateResume clicked!');
@@ -47,16 +49,38 @@ const Experience = () => {
         ),
       };
     });
-    setEditMode(false);
+    setExpEditMode(false);
     setCurrentExpUuid(null);
     setTempExp({ role: '', location: '', description: '', duration: '' });
   };
 
+  const handleSaveProjectChanges = (e) => {
+    e.preventDefault();
+    console.log('Saving changed project');
+    setUser((currentUser) => {
+      return {
+        ...currentUser,
+        projects: currentUser.projects.map((exp) =>
+          exp.id === currentProjectUuid ? tempProject : exp
+        ),
+      };
+    });
+    setProjectEditMode(false);
+    setCurrentProjectUuid(null);
+    setTempProject({ name: '', link: '', duration: '', description: '' });
+  };
+
   //For editting experiences, where it is in an input state
-  const handleCancelChanges = () => {
-    setEditMode(false);
+  const handleCancelExpChanges = () => {
+    setExpEditMode(false);
     setCurrentExpUuid(null);
     setTempExp({ role: '', location: '', description: '', duration: '' });
+  };
+
+  const handleCancelProjectChanges = () => {
+    setProjectEditMode(false);
+    setCurrentProjectUuid(null);
+    setTempProject({ name: '', link: '', duration: '', description: '' });
   };
 
   //For editting experiences, where it is in an input state
@@ -73,16 +97,37 @@ const Experience = () => {
       console.error('Experience not found!');
       return;
     }
-    setEditMode(true);
+    setExpEditMode(true);
     setCurrentExpUuid(uuid);
     setTempExp({ ...targettedExp });
   };
 
-  //For when it is just displaying cards, then clicking add more, should make editMode === true
-  const handleAddMore = () => {
-    setEditMode(true);
+  const handleEditProject = (uuid) => {
+    console.log('handleEditProject is running');
+    /* 
+    Find the targetted experience in user.experiences
+    Switch to input fields mode 
+    Copy everything from targettedExp to tempExp
+    After done editting, update in user as well
+    */
+    const targettedProject = user.projects.find((exp) => exp.id === uuid);
+    if (!targettedProject) {
+      console.error('Project not found!');
+      return;
+    }
+    setProjectEditMode(true);
+    setCurrentProjectUuid(uuid);
+    setTempProject({ ...targettedProject });
   };
 
+  //For when it is just displaying cards, then clicking add more, should make expEditMode === true
+  const handleAddMoreExp = () => {
+    setExpEditMode(true);
+  };
+
+  const handleAddMoreProject = () => {
+    setProjectEditMode(true);
+  };
   //For adding new experiences
   const handleExpSubmit = (e) => {
     console.log('A new experience is submitted!');
@@ -117,10 +162,40 @@ const Experience = () => {
       }));
     }
     setTempExp({ role: '', location: '', description: '', duration: '' });
-    setEditMode(false);
+    setExpEditMode(false);
   };
 
-  const handleDelete = (uuid) => {
+  const handleProjectSubmit = (e) => {
+    console.log('A new project is submitted!');
+
+    e.preventDefault();
+    if (
+      !tempProject.name ||
+      !tempProject.description ||
+      !tempProject.duration ||
+      !tempProject.link
+    ) {
+      console.error('Incomplete Project Information!');
+      return;
+    }
+
+    const formattedProject = { id: uuidv4(), ...tempProject };
+    if (user.projects.length === 0) {
+      setUser((currentUser) => ({
+        ...currentUser,
+        projects: [formattedProject],
+      }));
+    } else {
+      setUser((currentUser) => ({
+        ...currentUser,
+        projects: [...currentUser.projects, formattedProject],
+      }));
+    }
+    setTempProject({ name: '', link: '', duration: '', description: '' });
+    setProjectEditMode(false);
+  };
+
+  const handleExpDelete = (uuid) => {
     const targettedExp = user.experiences.find((exp) => exp.id === uuid);
     if (targettedExp) {
       setUser((currentUser) => ({
@@ -131,7 +206,22 @@ const Experience = () => {
       console.error('Experience not found!');
     }
     if (user.experiences.length === 1) {
-      setEditMode(true);
+      setExpEditMode(true);
+    }
+  };
+
+  const handleProjectDelete = (uuid) => {
+    const targettedProject = user.projects.find((pro) => pro.id === uuid);
+    if (targettedProject) {
+      setUser((currentUser) => ({
+        ...currentUser,
+        projects: currentUser.projects.filter((pro) => pro.id !== uuid),
+      }));
+    } else {
+      console.error('Project not found!');
+    }
+    if (user.projects.length === 1) {
+      setProjectEditMode(true);
     }
   };
   return (
@@ -149,9 +239,9 @@ const Experience = () => {
             Work Experience
           </div>
 
-          {/* When there's no past experiences (user.workExperience.length === 0 && !editMode)
+          {/* When there's no past experiences (user.workExperience.length === 0 && !expEditMode)
               show input fields only*/}
-          {user.experiences.length === 0 && !currentExpUuid && editMode && (
+          {user.experiences.length === 0 && !currentExpUuid && expEditMode && (
             <div className='flex flex-col gap-[12px]'>
               <div>
                 <input
@@ -204,11 +294,11 @@ const Experience = () => {
             </div>
           )}
 
-          {/* When there's past experiences (user.workExperience.length > 0) && !editMode
+          {/* When there's past experiences (user.workExperience.length > 0) && !expEditMode
             display experience + show input fields
           */}
 
-          {user.experiences.length > 0 && !editMode && !currentExpUuid && (
+          {user.experiences.length > 0 && !expEditMode && !currentExpUuid && (
             <div className='flex flex-col gap-[12px]'>
               {user.experiences.map((state, index) => (
                 <div
@@ -236,7 +326,7 @@ const Experience = () => {
                       <img
                         src='/DeleteIcon.png'
                         className='w-[20px] h-[20px]'
-                        onClick={() => handleDelete(state.id)}
+                        onClick={() => handleExpDelete(state.id)}
                       />
                     </div>
                   </div>
@@ -259,7 +349,7 @@ const Experience = () => {
                 <div className='flex flex-row justify-end gap-[10px]'>
                   <div
                     className='border border-[#1E3A8A] text-[#1E3A8A] rounded-xl py-[12px] px-[24px]'
-                    onClick={handleAddMore}>
+                    onClick={handleAddMoreExp}>
                     Add More
                   </div>
                   {/* <div
@@ -272,11 +362,11 @@ const Experience = () => {
             </div>
           )}
 
-          {/* When there's experiences, and in editMode, 
+          {/* When there's experiences, and in expEditMode, 
               Others remain to be in card display, currently targetted ones in input
           */}
           {user.experiences.length > 0 &&
-            editMode &&
+            expEditMode &&
             currentExpUuid &&
             user.experiences.map((exp, index) =>
               exp.id === currentExpUuid ? (
@@ -324,7 +414,7 @@ const Experience = () => {
                     <div className='flex flex-row justify-end gap-[10px]'>
                       <div
                         className='border border-[#1E3A8A] text-[#1E3A8A] rounded-xl py-[12px] px-[24px]'
-                        onClick={handleCancelChanges}>
+                        onClick={handleCancelExpChanges}>
                         Cancel
                       </div>
                       <div
@@ -384,7 +474,7 @@ const Experience = () => {
             )}
 
           {/* When user.experiences.length > 0, experiences are displayed, and add more is clicked*/}
-          {user.experiences.length > 0 && editMode && !currentExpUuid && (
+          {user.experiences.length > 0 && expEditMode && !currentExpUuid && (
             <div className='flex flex-col gap-[12px]'>
               {user.experiences.map((state, index) => (
                 <div
@@ -431,19 +521,6 @@ const Experience = () => {
                 </div>
               ))}
 
-              {/* <div className='py-[12px]'>
-                  <div className='flex flex-row justify-end gap-[10px]'>
-                    <div className='border border-[#1E3A8A] text-[#1E3A8A] rounded-xl py-[12px] px-[24px]'>
-                      Add More
-                    </div>
-                    <div
-                      className='py-[12px] px-[24px] rounded-xl bg-[#1D4ED8] text-white'
-                      onClick={(e) => handleExpSubmit(e)}>
-                      Save Changes
-                    </div>
-                  </div>
-                </div> */}
-
               <div className='flex flex-col gap-[12px]'>
                 <div>
                   <input
@@ -488,7 +565,7 @@ const Experience = () => {
                   <div className='flex flex-row justify-end gap-[10px]'>
                     <div
                       className='border border-[#1E3A8A] text-[#1E3A8A] rounded-xl py-[12px] px-[24px]'
-                      onClick={handleCancelChanges}>
+                      onClick={handleCancelExpChanges}>
                       Cancel
                     </div>
                     <div
@@ -501,6 +578,327 @@ const Experience = () => {
               </div>
             </div>
           )}
+
+          <div className='text-xl text-[#334155] font-semibold'>Projects</div>
+
+          {user.projects.length === 0 &&
+            !currentProjectUuid &&
+            projectEditMode && (
+              <div className='flex flex-col gap-[12px]'>
+                <div>
+                  <input
+                    id='name'
+                    placeholder={'Name'}
+                    value={tempProject.name}
+                    onChange={(e) => handleProjectChange(e)}
+                    className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                  />
+                </div>
+                <div className='flex flex-row w-full gap-[150px]'>
+                  <div>
+                    <input
+                      id='duration'
+                      placeholder='Duration'
+                      value={tempProject.duration}
+                      onChange={(e) => handleProjectChange(e)}
+                      className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                    />
+                  </div>
+
+                  <div>
+                    <input
+                      placeholder='Link'
+                      id='link'
+                      value={tempProject.link}
+                      onChange={(e) => handleProjectChange(e)}
+                      className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                    />
+                  </div>
+                </div>
+                <div>
+                  <input
+                    id='description'
+                    placeholder='Description'
+                    value={tempProject.description}
+                    onChange={(e) => handleProjectChange(e)}
+                    className='w-full py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                  />
+                </div>
+                <div className='py-[12px]'>
+                  <div className='flex flex-row justify-end gap-[10px]'>
+                    <div
+                      className='py-[12px] px-[24px] rounded-xl bg-[#1D4ED8] text-white'
+                      onClick={(e) => handleProjectSubmit(e)}>
+                      Save Changes
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
+
+          {user.projects.length > 0 &&
+            !projectEditMode &&
+            !currentProjectUuid && (
+              <div className='flex flex-col gap-[12px]'>
+                {user.projects.map((state, index) => (
+                  <div
+                    key={index}
+                    className={`py-[16px] px-[24px] flex flex-col gap-[16px] rounded-lg ${
+                      index % 2 === 0 ? 'bg-[#F1F5F9]' : 'bg-[#DBEAFE]'
+                    }`}>
+                    <div className='font-semibold text-xl flex flex-row justify-between text-black'>
+                      {state.link && (
+                        <a
+                          className='no-underline hover:cursor-pointer'
+                          target='_blank'
+                          href={state.link}>
+                          {state.name}
+                        </a>
+                      )}
+                      <div>{!state.link && (state.role || state.name)} </div>
+                      <div
+                        className={`items-center gap-[24px] col-span-2 flex flex-row`}>
+                        <img
+                          src='/EditIcon.png'
+                          className='w-[20px] h-[20px]'
+                          onClick={() => handleEditProject(state.id)}
+                        />
+                        <img
+                          src='/DeleteIcon.png'
+                          className='w-[20px] h-[20px]'
+                          onClick={() => handleProjectDelete(state.id)}
+                        />
+                      </div>
+                    </div>
+
+                    <div className='font-medium text-lg text-black'>
+                      {state.location
+                        ? `${state.location}, ${state.duration}`
+                        : `${state.duration}`}
+                    </div>
+                    <ul className='text-md text-black list-disc list-inside'>
+                      {state.description && (
+                        <div className='font-medium text-lg text-black'>
+                          {state.description}
+                        </div>
+                      )}
+                    </ul>
+                  </div>
+                ))}
+                <div className='py-[12px]'>
+                  <div className='flex flex-row justify-end gap-[10px]'>
+                    <div
+                      className='border border-[#1E3A8A] text-[#1E3A8A] rounded-xl py-[12px] px-[24px]'
+                      onClick={handleAddMoreProject}>
+                      Add More
+                    </div>
+                    {/* <div
+                    className='py-[12px] px-[24px] rounded-xl bg-[#1D4ED8] text-white'
+                    onClick={(e) => handleExpSubmit(e)}>
+                    Save Changes
+                  </div> */}
+                  </div>
+                </div>
+              </div>
+            )}
+
+          {user.projects.length > 0 &&
+            projectEditMode &&
+            currentProjectUuid &&
+            user.projects.map((exp, index) =>
+              exp.id === currentProjectUuid ? (
+                <div className='flex flex-col gap-[12px]'>
+                  <div>
+                    <input
+                      id='name'
+                      placeholder={'Name'}
+                      value={tempProject.name}
+                      onChange={(e) => handleProjectChange(e)}
+                      className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                    />
+                  </div>
+                  <div className='flex flex-row w-full gap-[150px]'>
+                    <div>
+                      <input
+                        id='duration'
+                        placeholder='Duration'
+                        value={tempProject.duration}
+                        onChange={(e) => handleProjectChange(e)}
+                        className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                      />
+                    </div>
+
+                    <div>
+                      <input
+                        placeholder='Link'
+                        id='link'
+                        value={tempProject.link}
+                        onChange={(e) => handleProjectChange(e)}
+                        className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <input
+                      id='description'
+                      placeholder='Description'
+                      value={tempProject.description}
+                      onChange={(e) => handleProjectChange(e)}
+                      className='w-full py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                    />
+                  </div>
+                  <div className='py-[12px]'>
+                    <div className='flex flex-row justify-end gap-[10px]'>
+                      <div
+                        className='border border-[#1E3A8A] text-[#1E3A8A] rounded-xl py-[12px] px-[24px]'
+                        onClick={handleCancelProjectChanges}>
+                        Cancel
+                      </div>
+                      <div
+                        className='py-[12px] px-[24px] rounded-xl bg-[#1D4ED8] text-white'
+                        onClick={(e) => handleSaveProjectChanges(e)}>
+                        Save Changes
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div className='flex flex-col gap-[12px]'>
+                  <div
+                    key={index}
+                    className={`py-[16px] px-[24px] flex flex-col gap-[16px] rounded-lg ${
+                      index % 2 === 0 ? 'bg-[#F1F5F9]' : 'bg-[#DBEAFE]'
+                    }`}>
+                    <div className='font-semibold text-xl flex flex-row justify-between text-black'>
+                      {exp.link && (
+                        <a
+                          className='no-underline hover:cursor-pointer'
+                          target='_blank'
+                          href={exp.link}>
+                          {exp.name}
+                        </a>
+                      )}
+                      <div>{!exp.link && (exp.role || exp.name)} </div>
+                    </div>
+
+                    <div className='font-medium text-lg text-black'>
+                      {exp.location
+                        ? `${exp.location}, ${exp.duration}`
+                        : `${exp.duration}`}
+                    </div>
+                    <ul className='text-md text-black list-disc list-inside'>
+                      {exp.description && (
+                        <div className='font-medium text-lg text-black'>
+                          {exp.description}
+                        </div>
+                      )}
+                    </ul>
+                  </div>
+                </div>
+              )
+            )}
+
+          {user.projects.length > 0 &&
+            projectEditMode &&
+            !currentProjectUuid && (
+              <div className='flex flex-col gap-[12px]'>
+                {user.projects.map((state, index) => (
+                  <div
+                    key={index}
+                    className={`py-[16px] px-[24px] flex flex-col gap-[16px] rounded-lg ${
+                      index % 2 === 0 ? 'bg-[#F1F5F9]' : 'bg-[#DBEAFE]'
+                    }`}>
+                    <div className='font-semibold text-xl flex flex-row justify-between text-black'>
+                      {state.link && (
+                        <a
+                          className='no-underline hover:cursor-pointer'
+                          target='_blank'
+                          href={state.link}>
+                          {state.name}
+                        </a>
+                      )}
+                      <div>{!state.link && (state.role || state.name)} </div>
+                      <div
+                        className={`items-center gap-[24px] col-span-2 flex flex-row`}>
+                        <img
+                          src='/EditIcon.png'
+                          className='w-[20px] h-[20px]'
+                          onClick={() => handleEditProject(state.id)}
+                        />
+                        <img
+                          src='/DeleteIcon.png'
+                          className='w-[20px] h-[20px]'
+                        />
+                      </div>
+                    </div>
+
+                    <div className='font-medium text-lg text-black'>
+                      {state.location
+                        ? `${state.location}, ${state.duration}`
+                        : `${state.duration}`}
+                    </div>
+                    <ul className='text-md text-black list-disc list-inside'>
+                      {state.description && (
+                        <div className='font-medium text-lg text-black'>
+                          {state.description}
+                        </div>
+                      )}
+                    </ul>
+                  </div>
+                ))}
+
+                <div className='flex flex-col gap-[12px]'>
+                  <div>
+                    <input
+                      id='name'
+                      placeholder={'Name'}
+                      value={tempProject.name}
+                      onChange={(e) => handleProjectChange(e)}
+                      className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                    />
+                  </div>
+                  <div className='flex flex-row w-full gap-[150px]'>
+                    <div>
+                      <input
+                        id='duration'
+                        placeholder='Duration'
+                        value={tempProject.duration}
+                        onChange={(e) => handleProjectChange(e)}
+                        className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                      />
+                    </div>
+
+                    <div>
+                      <input
+                        placeholder='Link'
+                        id='link'
+                        value={tempProject.link}
+                        onChange={(e) => handleProjectChange(e)}
+                        className='py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <input
+                      id='description'
+                      placeholder='Description'
+                      value={tempProject.description}
+                      onChange={(e) => handleProjectChange(e)}
+                      className='w-full py-[12px] px-[16px] border-slate-300 rounded-xl border'
+                    />
+                  </div>
+                  <div className='py-[12px]'>
+                    <div className='flex flex-row justify-end gap-[10px]'>
+                      <div
+                        className='py-[12px] px-[24px] rounded-xl bg-[#1D4ED8] text-white'
+                        onClick={(e) => handleProjectSubmit(e)}>
+                        Save Changes
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )}
         </div>
         <div className='flex flex-row justify-between'>
           <div
