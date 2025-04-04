@@ -22,6 +22,7 @@ import SoftwareEngineerPath from './pages/AuthUserPages/Upskill/SEPath/SoftwareE
 import Skills from './pages/AuthUserPages/ResumeBuilder/Skills';
 import AppliedTask from './pages/AuthUserPages/Upskill/AppliedTask';
 import AppliedScenario from './pages/AuthUserPages/Upskill/AppliedScenario';
+import Account from './pages/Account/Account';
 
 import { Navigate } from 'react-router-dom';
 import Experience from './pages/AuthUserPages/ResumeBuilder/Experience';
@@ -130,6 +131,11 @@ const App = () => {
           <Route
             path='applied_scenario'
             element={<AppliedScenario />}
+          />
+
+          <Route
+            path='account'
+            element={<Account />}
           />
         </Route>
       </Routes>
