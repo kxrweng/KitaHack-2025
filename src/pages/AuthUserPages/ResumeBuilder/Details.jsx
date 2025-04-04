@@ -4,41 +4,71 @@ import { useNavigate } from 'react-router';
 import useGlobalContext from '../../../hooks/useGlobalContext';
 const ResumeDetails = () => {
   const { user, setUser } = useGlobalContext();
-  console.log(user);
-  const navigate = useNavigate();
-  const [userInfo, setUserInfo] = useState({
-    name: '',
-    currentRole: '',
-    appliedRole: '',
-    email: '',
-    phoneNumber: '',
-    website: '',
-    introduction: '',
-    education: [],
-    skills: [],
-  });
 
+  const navigate = useNavigate();
+  // const [userInfo, setUserInfo] = useState({
+  //   currentRole: '',
+  //   appliedRole: '',
+  //   email: '',
+  //   phoneNumber: '',
+  //   website: '',
+  //   introduction: '',
+  //   education: [],
+  //   skills: [],
+  // });
+  // console.log(userInfo);
   const [tempEduInfo, setTempEduInfo] = useState({
     yearOfCompletion: '',
     levelOfEducation: '',
     learningInstitute: '',
     results: '',
   });
-
-  const [showEducation, setShowEducation] = useState(false);
-  const [editMode, setEditMode] = useState(false);
+  const [editMode, setEditMode] = useState(user.education.length === 0); //set to indicate display of input fields
   const [currentEduUuid, setCurrentEduUuid] = useState(null);
-  const [addMore, setAddMore] = useState(false);
+  console.log(tempEduInfo);
+  console.log(user);
 
+  // console.log(addMore);
   const handleChange = (e) => {
-    setUserInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+    setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
+  const handleDelete = (uuid) => {
+    const targettedEdu = user.education.find((edu) => edu.id === uuid);
+    if (targettedEdu) {
+      setUser((currentUser) => ({
+        ...currentUser,
+        education: currentUser.education.filter((edu) => edu.id !== uuid),
+      }));
+    } else {
+      console.error('Education not found!');
+    }
+    if (user.experiences.length === 1) {
+      setEditMode(true);
+    }
+  };
   const handleEduChange = (e) => {
     setTempEduInfo((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const handleAddMore = () => {
+    setEditMode(true);
+  };
+
+  const handleEditEdu = (uuid) => {
+    console.log('handleEditEdu is running');
+    const targettedEdu = user.education.find((edu) => edu.id === uuid);
+    if (!targettedEdu) {
+      console.error('Education not found!');
+      return;
+    }
+    setEditMode(true);
+    setCurrentEduUuid(uuid);
+    setTempEduInfo({ ...targettedEdu });
+  };
+
+  const handleCancelChange = () => {
+    setEditMode(false);
     setCurrentEduUuid(null);
     setTempEduInfo({
       yearOfCompletion: '',
@@ -46,38 +76,18 @@ const ResumeDetails = () => {
       learningInstitute: '',
       results: '',
     });
-    setAddMore(true);
   };
-
-  const handleCancelAddMore = () => {
-    setAddMore(false);
-  };
-
-  const enterEditMode = (uuid) => {
-    console.log('Entering Edit Mode');
-    const targettedEduExp = userInfo.education.find(
-      (education) => education.id === uuid
-    );
-    setTempEduInfo((prev) => ({ ...prev, ...targettedEduExp }));
-    setShowEducation(false);
-    setEditMode(true);
-    setCurrentEduUuid(uuid);
-  };
-
-  const saveEdittedCurrentEducationExperience = (uuid) => {
-    setUserInfo((prev) => ({
-      ...prev,
-      education: prev.education.map((eduExp) => {
-        if (eduExp.id === uuid) {
-          return { ...eduExp, ...tempEduInfo };
-        } else {
-          return eduExp;
-        }
-      }),
+  const handleSaveEduChanges = (e) => {
+    e.preventDefault();
+    console.log('Saving changed education');
+    setUser((currentUser) => ({
+      ...currentUser,
+      education: currentUser.education.map((edu) =>
+        edu.id === currentEduUuid ? tempEduInfo : edu
+      ),
     }));
     setEditMode(false);
-    setShowEducation(true);
-    setAddMore(false);
+    setCurrentEduUuid(null);
     setTempEduInfo({
       yearOfCompletion: '',
       levelOfEducation: '',
@@ -85,48 +95,43 @@ const ResumeDetails = () => {
       results: '',
     });
   };
-
-  const handleSubmit = (e) => {
+  //in edit mode, fresh start, users.education.length === 0
+  const handleAddEducation = (e) => {
     e.preventDefault();
     if (
       !tempEduInfo.yearOfCompletion ||
       !tempEduInfo.learningInstitute ||
-      !tempEduInfo.levelOfEducation
+      !tempEduInfo.levelOfEducation ||
+      !tempEduInfo.results
     ) {
-      console.error('Incomplete Information!');
+      console.error('Incomplete education information!');
       return;
     }
-
-    if (currentEduUuid) {
-      saveEdittedCurrentEducationExperience(currentEduUuid);
+    const formattedTempEduInfo = { ...tempEduInfo, id: uuidv4() };
+    if (user.education.length === 0) {
+      setUser((currentUser) => ({
+        ...currentUser,
+        education: [formattedTempEduInfo],
+      }));
     } else {
-      const formattedTempEduInfo = { ...tempEduInfo, id: uuidv4() };
-      if (userInfo.education.length === 0) {
-        setUserInfo((prev) => ({ ...prev, education: [formattedTempEduInfo] }));
-      } else {
-        setUserInfo((prev) => ({
-          ...prev,
-          education: prev.education.concat(formattedTempEduInfo),
-        }));
-      }
-      setTempEduInfo({
-        yearOfCompletion: '',
-        levelOfEducation: '',
-        learningInstitute: '',
-        results: '',
-      });
-      setShowEducation(true);
-      setAddMore(false);
+      setUser((currentUser) => ({
+        ...currentUser,
+        education: currentUser.education.concat(formattedTempEduInfo),
+      }));
     }
+    setTempEduInfo({
+      yearOfCompletion: '',
+      levelOfEducation: '',
+      learningInstitute: '',
+      results: '',
+    });
+    setEditMode(false);
   };
 
+  console.log(editMode);
+  console.log(currentEduUuid);
+
   const handleNext = () => {
-    //map userInfo into user
-    setUser(() => ({
-      ...userInfo,
-      education: [...userInfo.education],
-      skills: [...userInfo.skills],
-    }));
     navigate('/auth_user/resume_builder/build/skills');
   };
 
@@ -152,14 +157,14 @@ const ResumeDetails = () => {
                   name='name'
                   placeholder='Name'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                  value={userInfo.name}
+                  value={user.name}
                   onChange={(e) => handleChange(e)}
                 />
                 <input
                   placeholder='Current Occupation'
                   name='currentRole'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                  value={userInfo.currentRole}
+                  value={user.currentRole}
                   onChange={(e) => handleChange(e)}
                 />{' '}
               </div>
@@ -168,7 +173,7 @@ const ResumeDetails = () => {
                   placeholder='Aspired Occupation'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
                   name='appliedRole'
-                  value={userInfo.appliedRole}
+                  value={user.appliedRole}
                   onChange={(e) => handleChange(e)}
                 />{' '}
               </div>
@@ -185,14 +190,14 @@ const ResumeDetails = () => {
                   placeholder='Email'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
                   name='email'
-                  value={userInfo.email}
+                  value={user.email}
                   onChange={(e) => handleChange(e)}
                 />
                 <input
                   placeholder='Phone Number'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
                   name='phoneNumber'
-                  value={userInfo.phoneNumber}
+                  value={user.phoneNumber}
                   onChange={(e) => handleChange(e)}
                 />{' '}
               </div>
@@ -201,7 +206,7 @@ const ResumeDetails = () => {
                   placeholder='Website / LinkedIn URL'
                   className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
                   name='website'
-                  value={userInfo.website}
+                  value={user.website}
                   onChange={(e) => handleChange(e)}
                 />{' '}
               </div>
@@ -210,22 +215,25 @@ const ResumeDetails = () => {
 
           <div className='flex flex-col gap-[8px] '>
             <div className='text-lg text-[#334155] font-semibold'>
-              Objective <span className='text-red-700 font-bold'>*</span>
+              Brief Introduction{' '}
+              <span className='text-red-700 font-bold'>*</span>
             </div>
             <input
-              placeholder='Objective'
+              placeholder='Brief Introduction'
               className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-              name='objective'
-              value={userInfo.objective}
+              name='introduction'
+              value={user.introduction}
               onChange={(e) => handleChange(e)}
             />{' '}
           </div>
 
-          <div className='flex flex-col gap-[8px] '>
-            <div className='text-lg text-[#334155] font-semibold'>
-              Education <span className='text-red-700 font-bold'>*</span>
-            </div>
-            {!showEducation && !editMode && (
+          <div className='text-lg text-[#334155] font-semibold'>
+            Education <span className='text-red-700 font-bold'>*</span>
+          </div>
+
+          {/* When there's no past education (user.education.length === 0 && !editMode) */}
+          {user.education.length === 0 && !currentEduUuid && editMode && (
+            <div className='flex flex-col gap-[8px] '>
               <div className='flex flex-row gap-[32px]'>
                 <div className='flex flex-col gap-[4px]'>
                   <label htmlFor='yearOfCompletion'>Year of Completion</label>
@@ -274,11 +282,178 @@ const ResumeDetails = () => {
                   </div>
                 </div>
               </div>
-            )}
+              <div className='flex flex-col gap-[8px]'>
+                <div className='flex flex-col gap-[12px]'></div>{' '}
+                <div className='flex flex-row gap-[10px] justify-end'>
+                  <div
+                    className=' border rounded-lg px-[20px] py-[10px] bg-[#1D4ED8] text-white hover:cursor-pointer'
+                    onClick={(e) => handleAddEducation(e)}>
+                    Save Changes
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
-            <div className='flex flex-col'>
-              {/* Below is showing actual education experience*/}
-              {showEducation && userInfo.education.length > 0 && !editMode && (
+          {/* When there's past education(user.education.length > 0) && !editMode
+            display experience + show input fields
+          */}
+          {user.education.length > 0 && !editMode && !currentEduUuid && (
+            <div className='flex flex-col gap-[4px]'>
+              <div className='grid grid-cols-12'>
+                <div
+                  className={`  
+                             col-span-2
+                          `}>
+                  Year of Completion
+                </div>
+                <div
+                  className={`  
+                             col-span-2
+                          `}>
+                  Level of Education
+                </div>
+                <div className={`col-span-4`}>Learning Institute</div>
+                <div className={`col-span-2`}>Results</div>
+                <div className={`col-span-2`}>Actions</div>
+              </div>
+              {user.education.map((education, index) => (
+                <div
+                  className={`grid grid-cols-12 ${
+                    index % 2 === 0 ? 'bg-[#F1F5F9]' : 'bg-[#DBEAFE]'
+                  }`}
+                  key={index}>
+                  <div
+                    className={`  px-[4px] py-[12px]  
+                             col-span-2 
+                          }`}>
+                    {education.yearOfCompletion}
+                  </div>
+                  <div
+                    className={` px-[4px] py-[12px] 
+                            col-span-2 
+                          }`}>
+                    {education.levelOfEducation}
+                  </div>
+                  <div className={`  px-[4px] py-[12px] col-span-4`}>
+                    {education.learningInstitute}
+                  </div>
+                  <div className={`  px-[4px] py-[12px] col-span-2`}>
+                    {education.results}
+                  </div>
+                  <div
+                    className={`items-center gap-[24px] col-span-2 flex flex-row`}>
+                    <img
+                      src='/EditIcon.png'
+                      className='w-[20px] h-[20px]'
+                      onClick={() => handleEditEdu(education.id)}
+                    />
+                    <img
+                      src='/DeleteIcon.png'
+                      className='w-[20px] h-[20px]'
+                      onClick={() => handleDelete(education.id)}
+                    />
+                  </div>
+                  {/* )} */}
+                </div>
+              ))}
+              <div className='flex flex-col gap-[8px]'>
+                <div className='flex flex-col gap-[12px]'></div>{' '}
+                <div className='flex flex-row gap-[10px] justify-end'>
+                  <div
+                    onClick={handleAddMore}
+                    className='border-[#1E3A8A] border rounded-lg px-[20px] py-[10px] text-[#1E3A8A] hover:cursor-pointer'>
+                    Add More
+                  </div>
+                  {/* <div className=' border rounded-lg px-[20px] py-[10px] bg-[#1D4ED8] text-white hover:cursor-pointer'>
+                    Save Changes
+                  </div> */}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* When there's experiences, and in editMode, 
+              Others remain to be in card display, currently targetted ones in input
+          */}
+          {user.education.length > 0 &&
+            editMode &&
+            currentEduUuid &&
+            user.education.map((edu, index) =>
+              edu.id === currentEduUuid ? (
+                <div className='flex flex-col gap-[8px] '>
+                  <div className='flex flex-row gap-[32px]'>
+                    <div className='flex flex-col gap-[4px]'>
+                      <label htmlFor='yearOfCompletion'>
+                        Year of Completion
+                      </label>
+                      <input
+                        placeholder='Year'
+                        id='yearOfCompletion'
+                        className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
+                        name='yearOfCompletion'
+                        value={tempEduInfo.yearOfCompletion}
+                        onChange={(e) => handleEduChange(e)}
+                      />{' '}
+                    </div>
+                    <div className='flex flex-col gap-[4px]'>
+                      <label htmlFor='levelOfEducation'>
+                        Level of Education
+                      </label>
+                      <input
+                        placeholder='Level'
+                        id='levelOfEducation'
+                        className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
+                        name='levelOfEducation'
+                        value={tempEduInfo.levelOfEducation}
+                        onChange={(e) => handleEduChange(e)}
+                      />{' '}
+                    </div>
+                    <div className='flex flex-col gap-[4px] basis-[30%]'>
+                      <label htmlFor='learningInstitute'>
+                        Learning Institute
+                      </label>
+                      <input
+                        placeholder='Institution Name'
+                        id='learningInstitute'
+                        className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
+                        name='learningInstitute'
+                        value={tempEduInfo.learningInstitute}
+                        onChange={(e) => handleEduChange(e)}
+                      />{' '}
+                    </div>
+                    <div className='flex flex-col gap-[4px]'>
+                      <label htmlFor='results'>Results</label>
+
+                      <div className='flex flex-row items-center gap-[32px]'>
+                        <input
+                          placeholder='CGPA'
+                          id='results'
+                          className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
+                          name='results'
+                          value={tempEduInfo.results}
+                          onChange={(e) => handleEduChange(e)}
+                        />{' '}
+                      </div>
+                    </div>
+                  </div>
+                  <div className='flex flex-col gap-[8px]'>
+                    <div className='flex flex-col gap-[12px]'></div>{' '}
+                    <div className='flex flex-row gap-[10px] justify-end'>
+                      <div
+                        onClick={handleCancelChange}
+                        className='border-[#1E3A8A] border rounded-lg px-[20px] py-[10px] text-[#1E3A8A] hover:cursor-pointer'>
+                        Cancel
+                      </div>
+                      <div
+                        onClick={(e) => handleSaveEduChanges(e)}
+                        className=' border rounded-lg px-[20px] py-[10px] bg-[#1D4ED8] text-white hover:cursor-pointer'>
+                        Save Changes
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              ) : (
                 <div className='flex flex-col gap-[4px]'>
                   <div className='grid grid-cols-12'>
                     <div
@@ -297,164 +472,153 @@ const ResumeDetails = () => {
                     <div className={`col-span-2`}>Results</div>
                     <div className={`col-span-2`}>Actions</div>
                   </div>
-                  {userInfo.education.map((education, index) => (
+                  <div
+                    className={`grid grid-cols-12 ${
+                      index % 2 === 0 ? 'bg-[#F1F5F9]' : 'bg-[#DBEAFE]'
+                    }`}
+                    key={index}>
                     <div
-                      className={`grid grid-cols-12 ${
-                        index % 2 === 0 ? 'bg-[#F1F5F9]' : 'bg-[#DBEAFE]'
-                      }`}
-                      key={index}>
-                      <div
-                        className={`  px-[4px] py-[12px]  
+                      className={`  px-[4px] py-[12px]  
                              col-span-2 
                           }`}>
-                        {education.yearOfCompletion}
-                      </div>
-                      <div
-                        className={` px-[4px] py-[12px] 
+                      {edu.yearOfCompletion}
+                    </div>
+                    <div
+                      className={` px-[4px] py-[12px] 
                             col-span-2 
                           }`}>
-                        {education.levelOfEducation}
-                      </div>
-                      <div className={`  px-[4px] py-[12px] col-span-4`}>
-                        {education.learningInstitute}
-                      </div>
-                      <div className={`  px-[4px] py-[12px] col-span-2`}>
-                        {education.results}
-                      </div>
-                      <div
-                        className={`items-center gap-[24px] col-span-2 flex flex-row`}>
-                        <img
-                          src='/EditIcon.png'
-                          className='w-[20px] h-[20px]'
-                          onClick={() => enterEditMode(education.id)}
-                        />
-                        <img
-                          src='/DeleteIcon.png'
-                          className='w-[20px] h-[20px]'
-                        />
-                      </div>
-                      {/* )} */}
+                      {edu.levelOfEducation}
                     </div>
-                  ))}
-                </div>
-              )}
-              {/* Below is showing input fields with pre-existing education exp*/}
-              {!showEducation && userInfo.education.length > 0 && editMode && (
-                <div className='flex flex-row gap-[32px]'>
-                  <div className='flex flex-col gap-[4px]'>
-                    <label htmlFor='yearOfCompletion'>Year of Completion</label>
-                    <input
-                      id='yearOfCompletion'
-                      className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                      name='yearOfCompletion'
-                      value={tempEduInfo.yearOfCompletion}
-                      onChange={(e) => handleEduChange(e)}
-                    />{' '}
-                  </div>
-                  <div className='flex flex-col gap-[4px]'>
-                    <label htmlFor='levelOfEducation'>Level of Education</label>
-                    <input
-                      id='levelOfEducation'
-                      className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                      name='levelOfEducation'
-                      value={tempEduInfo.levelOfEducation}
-                      onChange={(e) => handleEduChange(e)}
-                    />{' '}
-                  </div>
-                  <div className='flex flex-col gap-[4px] basis-[30%]'>
-                    <label htmlFor='learningInstitute'>
-                      Learning Institute
-                    </label>
-                    <input
-                      id='learningInstitute'
-                      className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                      name='learningInstitute'
-                      value={tempEduInfo.learningInstitute}
-                      onChange={(e) => handleEduChange(e)}
-                    />{' '}
-                  </div>
-                  <div className='flex flex-col gap-[4px]'>
-                    <label htmlFor='results'>Results</label>
-                    <div className='flex flex-row items-center gap-[32px]'>
-                      <input
-                        id='results'
-                        className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                        name='results'
-                        value={tempEduInfo.results}
-                        onChange={(e) => handleEduChange(e)}
-                      />{' '}
+                    <div className={`  px-[4px] py-[12px] col-span-4`}>
+                      {edu.learningInstitute}
+                    </div>
+                    <div className={`  px-[4px] py-[12px] col-span-2`}>
+                      {edu.results}
                     </div>
                   </div>
                 </div>
-              )}
+              )
+            )}
 
-              {addMore && (
-                <div className='flex flex-row gap-[32px]'>
-                  <div className='flex flex-col gap-[4px]'>
-                    <label htmlFor='yearOfCompletion'>Year of Completion</label>
+          {/* When user.education.length > 0, education are displayed, and add more is clicked*/}
+          {user.education.length > 0 && editMode && !currentEduUuid && (
+            <div className='flex flex-col gap-[4px]'>
+              <div className='grid grid-cols-12'>
+                <div
+                  className={`  
+                             col-span-2
+                          `}>
+                  Year of Completion
+                </div>
+                <div
+                  className={`  
+                             col-span-2
+                          `}>
+                  Level of Education
+                </div>
+                <div className={`col-span-4`}>Learning Institute</div>
+                <div className={`col-span-2`}>Results</div>
+                <div className={`col-span-2`}>Actions</div>
+              </div>
+              {user.education.map((education, index) => (
+                <div
+                  className={`grid grid-cols-12 ${
+                    index % 2 === 0 ? 'bg-[#F1F5F9]' : 'bg-[#DBEAFE]'
+                  }`}
+                  key={index}>
+                  <div
+                    className={`  px-[4px] py-[12px]  
+                             col-span-2 
+                          }`}>
+                    {education.yearOfCompletion}
+                  </div>
+                  <div
+                    className={` px-[4px] py-[12px] 
+                            col-span-2 
+                          }`}>
+                    {education.levelOfEducation}
+                  </div>
+                  <div className={`  px-[4px] py-[12px] col-span-4`}>
+                    {education.learningInstitute}
+                  </div>
+                  <div className={`  px-[4px] py-[12px] col-span-2`}>
+                    {education.results}
+                  </div>
+                  <div
+                    className={`items-center gap-[24px] col-span-2 flex flex-row`}>
+                    <img
+                      src='/EditIcon.png'
+                      className='w-[20px] h-[20px]'
+                    />
+                    <img
+                      src='/DeleteIcon.png'
+                      className='w-[20px] h-[20px]'
+                    />
+                  </div>
+                  {/* )} */}
+                </div>
+              ))}
+              <div className='flex flex-row gap-[32px]'>
+                <div className='flex flex-col gap-[4px]'>
+                  <input
+                    placeholder='Year'
+                    id='yearOfCompletion'
+                    className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
+                    name='yearOfCompletion'
+                    value={tempEduInfo.yearOfCompletion}
+                    onChange={(e) => handleEduChange(e)}
+                  />{' '}
+                </div>
+                <div className='flex flex-col gap-[4px]'>
+                  <input
+                    placeholder='Level'
+                    id='levelOfEducation'
+                    className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
+                    name='levelOfEducation'
+                    value={tempEduInfo.levelOfEducation}
+                    onChange={(e) => handleEduChange(e)}
+                  />{' '}
+                </div>
+                <div className='flex flex-col gap-[4px] basis-[30%]'>
+                  <input
+                    placeholder='Institution Name'
+                    id='learningInstitute'
+                    className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
+                    name='learningInstitute'
+                    value={tempEduInfo.learningInstitute}
+                    onChange={(e) => handleEduChange(e)}
+                  />{' '}
+                </div>
+                <div className='flex flex-col gap-[4px]'>
+                  <div className='flex flex-row items-center gap-[32px]'>
                     <input
-                      placeholder='Year'
-                      id='yearOfCompletion'
+                      placeholder='CGPA'
+                      id='results'
                       className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                      name='yearOfCompletion'
-                      value={tempEduInfo.yearOfCompletion}
+                      name='results'
+                      value={tempEduInfo.results}
                       onChange={(e) => handleEduChange(e)}
                     />{' '}
-                  </div>
-                  <div className='flex flex-col gap-[4px]'>
-                    <label htmlFor='levelOfEducation'>Level of Education</label>
-                    <input
-                      placeholder='Level'
-                      id='levelOfEducation'
-                      className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                      name='levelOfEducation'
-                      value={tempEduInfo.levelOfEducation}
-                      onChange={(e) => handleEduChange(e)}
-                    />{' '}
-                  </div>
-                  <div className='flex flex-col gap-[4px] basis-[30%]'>
-                    <label htmlFor='learningInstitute'>
-                      Learning Institute
-                    </label>
-                    <input
-                      placeholder='Institution Name'
-                      id='learningInstitute'
-                      className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                      name='learningInstitute'
-                      value={tempEduInfo.learningInstitute}
-                      onChange={(e) => handleEduChange(e)}
-                    />{' '}
-                  </div>
-                  <div className='flex flex-col gap-[4px]'>
-                    <label htmlFor='results'>Results</label>
-                    <div className='flex flex-row items-center gap-[32px]'>
-                      <input
-                        placeholder='CGPA'
-                        id='results'
-                        className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
-                        name='results'
-                        value={tempEduInfo.results}
-                        onChange={(e) => handleEduChange(e)}
-                      />{' '}
-                    </div>
                   </div>
                 </div>
-              )}
+              </div>
+              <div className='flex flex-col gap-[8px]'>
+                <div className='flex flex-col gap-[12px]'></div>{' '}
+                <div className='flex flex-row gap-[10px] justify-end'>
+                  <div
+                    onClick={handleCancelChange}
+                    className='border-[#1E3A8A] border rounded-lg px-[20px] py-[10px] text-[#1E3A8A] hover:cursor-pointer'>
+                    Cancel
+                  </div>
+                  <div
+                    onClick={(e) => handleAddEducation(e)}
+                    className=' border rounded-lg px-[20px] py-[10px] bg-[#1D4ED8] text-white hover:cursor-pointer'>
+                    Save Changes
+                  </div>
+                </div>
+              </div>
             </div>
-          </div>
-
-          <div className='flex flex-row gap-[10px] justify-end'>
-            <div
-              className='border-[#1E3A8A] border rounded-lg px-[20px] py-[10px] text-[#1E3A8A] hover:cursor-pointer'
-              onClick={addMore ? handleCancelAddMore : handleAddMore}>
-              {addMore ? 'Cancel' : 'Add More'}
-            </div>
-            <div
-              className=' border rounded-lg px-[20px] py-[10px] bg-[#1D4ED8] text-white hover:cursor-pointer'
-              onClick={(e) => handleSubmit(e)}>
-              Save Changes
-            </div>
-          </div>
+          )}
 
           <div className='flex flex-row justify-between'>
             <div

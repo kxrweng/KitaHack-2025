@@ -39,7 +39,7 @@ const MbtiPersonalityCheck = () => {
       </div>
       <div className='flex flex-col px-[272px] h-[448px] w-[752px] '>
         <div className='bg-[#1D4ED8] px-[32px] py-[8px] w-fit text-white relative top-3 left-5 font-mono rounded-full'>
-          Test User
+          {user.name}
         </div>
         <div className='flex flex-col py-[16px] gap-[24px] pb-[25px] bg-white px-[24px] w-[800px] outline-slate-100 rounded-xl outline-1'>
           <div className='flex flex-col gap-[10px] justify-between'>

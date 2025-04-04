@@ -5,7 +5,7 @@ import { GlobalContext } from './GlobalContext';
 export const GlobalProvider = ({ children }) => {
   // User state
   const [user, setUser] = useState({
-    name: '',
+    name: 'Test User',
     age: '',
     gender: '',
     currentField: '',
@@ -20,7 +20,7 @@ export const GlobalProvider = ({ children }) => {
     introduction: '',
     education: [],
     skills: [],
-    workExperience: [],
+    experiences: [],
     projects: [],
   });
 

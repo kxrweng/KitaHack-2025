@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useGlobalContext from '../../../hooks/useGlobalContext';
-const ExperienceInput = ({ topic, handleAddMore, handleSaveChanges }) => {
+const ExperienceInput = ({
+  topic,
+  experiences = [],
+  setExperiences = () => {},
+  projects = [],
+  setProjects = () => {},
+}) => {
   const { user, setUser } = useGlobalContext();
+  console.log(user);
   //  const [tempExp, setTempExp] = useState({
   //     role: '',
   //     location: '',
@@ -14,9 +21,8 @@ const ExperienceInput = ({ topic, handleAddMore, handleSaveChanges }) => {
   //     duration: '',
   //     link: '',
   //     description: '', })
-  const [experiences, setExperiences] = useState([]);
-  const [projects, setProjects] = useState([]);
-
+  // const [experiences, setExperiences] = useState([]);
+  // const [projects, setProjects] = useState([]);
   const [tempExp, setTempExp] = useState({
     role: '',
     location: '',
@@ -38,16 +44,21 @@ const ExperienceInput = ({ topic, handleAddMore, handleSaveChanges }) => {
     setTempExp((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 
   const handleSaveExp = () => {
-    setProjects((prev) => [...prev, tempExp]);
-    setUser((prev) => )
+    console.log('handleSaveExp is clicked!');
+    setExperiences((prev) => [...prev, tempExp]);
+    // setUser((prev) => ({ ...prev, experiences: [...experiences] }));
     setTempExp({ role: '', location: '', duration: '', description: '' });
   };
 
   const handleSaveProjects = () => {
-    setExperiences((prev) => [...prev, tempProject]);
+    setProjects((prev) => [...prev, tempProject]);
+    // setUser((prev) => ({ ...prev, projects: [...projects] }));
     setTempProject({ name: '', duration: '', link: '', description: '' });
   };
 
+  const handleAddMore = () => {
+    console.log('handleAddMore is clicked!');
+  };
   return (
     <div className='flex flex-col gap-[8px]'>
       {topic === 'work' ? (
@@ -106,7 +117,7 @@ const ExperienceInput = ({ topic, handleAddMore, handleSaveChanges }) => {
               </div>
               <div
                 className='py-[12px] px-[24px] rounded-xl bg-[#1D4ED8] text-white'
-                onClick={handleSaveChanges}>
+                onClick={handleSaveExp}>
                 Save Changes
               </div>
             </div>
@@ -166,7 +177,7 @@ const ExperienceInput = ({ topic, handleAddMore, handleSaveChanges }) => {
               </div>
               <div
                 className='py-[12px] px-[24px] rounded-xl bg-[#1D4ED8] text-white'
-                onClick={handleSaveChanges}>
+                onClick={handleSaveProjects}>
                 Save Changes
               </div>
             </div>

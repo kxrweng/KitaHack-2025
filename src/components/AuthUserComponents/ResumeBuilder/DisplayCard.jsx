@@ -29,10 +29,14 @@ const DisplayCard = ({ state = [] }) => {
                 : `${state.duration}`}
             </div>
             <ul className='text-md text-black list-disc list-inside'>
-              {state.description &&
-                state.description.map((desc, index) => (
-                  <li key={index}>{desc}</li>
-                ))}
+              {state.description && (
+                // state.description.map((desc, index) => (
+                //   <li key={index}>{desc}</li>
+                // ))
+                <div className='font-medium text-lg text-black'>
+                  {state.description}
+                </div>
+              )}
             </ul>
           </div>
         ))}
