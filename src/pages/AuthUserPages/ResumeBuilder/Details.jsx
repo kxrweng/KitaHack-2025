@@ -1,36 +1,85 @@
-import React, { useState } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { useNavigate } from 'react-router';
 import useGlobalContext from '../../../hooks/useGlobalContext';
+import { GoogleGenAI } from '@google/genai';
+import Markdown from 'react-markdown';
+
 const ResumeDetails = () => {
   const { user, setUser } = useGlobalContext();
-
+  console.log(user);
   const navigate = useNavigate();
-  // const [userInfo, setUserInfo] = useState({
-  //   currentRole: '',
-  //   appliedRole: '',
-  //   email: '',
-  //   phoneNumber: '',
-  //   website: '',
-  //   introduction: '',
-  //   education: [],
-  //   skills: [],
-  // });
-  // console.log(userInfo);
+
   const [tempEduInfo, setTempEduInfo] = useState({
     yearOfCompletion: '',
     levelOfEducation: '',
     learningInstitute: '',
     results: '',
   });
+
+  const [showFeedback, setShowFeedback] = useState(true);
   const [editMode, setEditMode] = useState(user.education.length === 0); //set to indicate display of input fields
   const [currentEduUuid, setCurrentEduUuid] = useState(null);
-  console.log(tempEduInfo);
-  console.log(user);
+  const introRef = useRef(null);
+  const stringifiedDetailsChatHistory =
+    localStorage.getItem('detailsChatHistory');
+  console.log(stringifiedDetailsChatHistory);
+  const [conversation, setConversation] = useState(
+    stringifiedDetailsChatHistory
+      ? JSON.parse(stringifiedDetailsChatHistory)
+      : []
+  );
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+  const chat = ai.chats.create({
+    model: 'gemini-1.5-flash-8b',
+    history: conversation,
+    config: {
+      maxOutputTokens: 100,
+      candidateCount: 1,
+      temperature: 0.5,
+      systemInstruction: `Try not to give too long response. Provide response with one point on its issue, one way of fixing it, and one example of a better introduction. Only one for each. `,
+    },
+  });
+
+  useEffect(() => {
+    console.log('Conversation updated:', conversation);
+  }, [conversation]);
 
   // console.log(addMore);
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
+
+  const getResponse = async (introduction) => {
+    console.log('getResponse is called');
+    const message = `Comment on the brief introduction section of my resume. This is the introduction : ${introduction}.`;
+    console.log(message);
+    const response = await chat.sendMessage({ message });
+    console.log(response);
+    return response;
+  };
+
+  console.log(conversation);
+
+  const handleGetFeedback = async () => {
+    const latestIntro = introRef.current?.value?.trim() ?? '';
+
+    if (!latestIntro) {
+      console.log('Introduction is empty. Skipping feedback request.');
+      return;
+    }
+
+    setShowFeedback(true);
+
+    try {
+      await getResponse(latestIntro);
+      const parsedConversation = JSON.stringify(conversation);
+      console.log(parsedConversation);
+      setConversation([...JSON.parse(parsedConversation)]);
+      localStorage.setItem('detailsChatHistory', parsedConversation);
+    } catch (error) {
+      console.log(error);
+    }
   };
 
   const handleDelete = (uuid) => {
@@ -128,9 +177,6 @@ const ResumeDetails = () => {
     setEditMode(false);
   };
 
-  console.log(editMode);
-  console.log(currentEduUuid);
-
   const handleNext = () => {
     navigate('/auth_user/resume_builder/build/skills');
   };
@@ -222,6 +268,7 @@ const ResumeDetails = () => {
               placeholder='Brief Introduction'
               className='px-[16px] py-[12px] rounded-xl border-[#CBD5E1] border text-black'
               name='introduction'
+              ref={introRef}
               value={user.introduction}
               onChange={(e) => handleChange(e)}
             />{' '}
@@ -627,7 +674,9 @@ const ResumeDetails = () => {
               Previous
             </div>{' '}
             <div className='flex flex-row gap-[10px]'>
-              <div className='border-[#1E3A8A] border rounded-lg px-[24px] py-[12px] text-[#1E3A8A] text-xl hover:cursor-pointer'>
+              <div
+                onClick={handleGetFeedback}
+                className='border-[#1E3A8A] border rounded-lg px-[24px] py-[12px] text-[#1E3A8A] text-xl hover:cursor-pointer'>
                 Get Feedback
               </div>{' '}
               <div
@@ -640,8 +689,45 @@ const ResumeDetails = () => {
         </div>
       </div>
 
-      <div className='flex flex-col w-[30%] border sticky  right-0 top-0'>
-        <div>Chatbot here</div>
+      <div className='flex flex-col w-[30%]  sticky  right-0 top-0'>
+        <div className='flex flex-row gap-[10px] p-[16px] items-center border-b-1 bg-white border-slate-300 justify-between sticky top-0'>
+          <div className='font-semibold text-xl flex items-center justify-center text-[#1E3A8A]'>
+            Feedback From Miles
+          </div>
+          {/* <div
+                      className='text-xl font-semibold cursor-pointer'
+                      onClick={toggleHideChatContainer}>
+                      X
+                    </div> */}
+        </div>
+
+        {/* Chat Messages (Scrollable) */}
+        <div className='bg-[#DBEAFE] flex flex-col py-[24px] px-[12px] gap-[12px] flex-1 overflow-auto'>
+          <div
+            className={`flex flex-col gap-[4px] ${
+              showFeedback ? 'hidden' : ''
+            }`}>
+            Receive feedback for your input here when you press the Get Feedback
+            button.
+          </div>
+          {showFeedback &&
+            conversation.length > 0 &&
+            conversation.map(
+              (chat, index) =>
+                chat.role === 'model' && (
+                  <div
+                    key={index}
+                    className='flex flex-col gap-[4px]'>
+                    <div className='text-[#64748B] mr-auto font-semibold'>
+                      Miles 🤖
+                    </div>
+                    <div className='bg-white rounded-xl px-[12px] py-[16px]'>
+                      <Markdown>{chat.parts[0].text}</Markdown>
+                    </div>
+                  </div>
+                )
+            )}
+        </div>
       </div>
     </div>
   );

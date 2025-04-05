@@ -4,25 +4,29 @@ import { GlobalContext } from './GlobalContext';
 
 export const GlobalProvider = ({ children }) => {
   // User state
-  const [user, setUser] = useState({
-    name: 'Test User',
-    age: '',
-    gender: '',
-    currentField: '',
-    fieldOfInterest: '',
-    careerInterest: '',
-    mbti: '',
-    currentRole: '',
-    appliedRole: '',
-    email: '',
-    phoneNumber: '',
-    website: '',
-    introduction: '',
-    education: [],
-    skills: [],
-    experiences: [],
-    projects: [],
-  });
+  const savedUser = localStorage.getItem('savedUser');
+
+  const [user, setUser] = useState(
+    JSON.parse(savedUser) || {
+      name: 'Test User',
+      age: '',
+      gender: '',
+      currentField: '',
+      fieldOfInterest: '',
+      careerInterest: '',
+      mbti: '',
+      currentRole: '',
+      appliedRole: '',
+      email: '',
+      phoneNumber: '',
+      website: '',
+      introduction: '',
+      education: [],
+      skills: [],
+      experiences: [],
+      projects: [],
+    }
+  );
 
   return (
     <GlobalContext.Provider value={{ user, setUser }}>

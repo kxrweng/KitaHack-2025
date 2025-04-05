@@ -8,8 +8,18 @@ const Landing = () => {
   const [uploadedFileName, setUploadedFileName] = useState('');
 
   const handleFileUpload = (e) => {
-    setUploadedFileName(e.target.files[0].name);
+    const file = e.target.files[0];
+    console.log(file);
+    if (file && file.type === 'image/jpeg') {
+      setUploadedFileName(file.name);
+
+      // Pass the file object through navigation state
+      navigate('/auth_user/resume_builder/upload/review', {
+        state: { file },
+      });
+    }
   };
+
   return (
     <div className=' mx-[72px] py-[100px] px-[72px] border border-slate-300 w-full mt-[120px] bg-white'>
       <div className='flex flex-col justify-center items-center gap-9 '>

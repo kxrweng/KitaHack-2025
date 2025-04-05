@@ -23,10 +23,11 @@ import Skills from './pages/AuthUserPages/ResumeBuilder/Skills';
 import AppliedTask from './pages/AuthUserPages/Upskill/AppliedTask';
 import AppliedScenario from './pages/AuthUserPages/Upskill/AppliedScenario';
 import Account from './pages/Account/Account';
-
+import GeneratedResume from './pages/AuthUserPages/ResumeBuilder/GeneratedResume';
 import { Navigate } from 'react-router-dom';
 import Experience from './pages/AuthUserPages/ResumeBuilder/Experience';
-
+import ResumePreview from './pages/AuthUserPages/ResumeBuilder/ResumePreview';
+import ResumeReview from './pages/AuthUserPages/ResumeBuilder/ResumeReview';
 const App = () => {
   return (
     <BrowserRouter>
@@ -111,6 +112,10 @@ const App = () => {
             element={<ResumeBuilderLanding />}
           />
           <Route
+            path='resume_builder/upload/review'
+            element={<ResumeReview />}
+          />
+          <Route
             path='resume_builder/build/details'
             element={<ResumeDetails />}
           />
@@ -125,6 +130,10 @@ const App = () => {
           />
 
           <Route
+            path='resume_builder/build/preview'
+            element={<ResumePreview />}
+          />
+          <Route
             path='applied_task'
             element={<AppliedTask />}
           />
@@ -138,6 +147,10 @@ const App = () => {
             element={<Account />}
           />
         </Route>
+        <Route
+          path='resume'
+          element={<GeneratedResume />}
+        />
       </Routes>
     </BrowserRouter>
   );

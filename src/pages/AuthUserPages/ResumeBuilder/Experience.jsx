@@ -35,6 +35,8 @@ const Experience = () => {
 
   const handleGenerateResume = () => {
     console.log('HandleGenerateResume clicked!');
+    localStorage.setItem('savedUser', JSON.stringify(user));
+    navigate('/auth_user/resume_builder/build/preview');
   };
 
   //For Editting Experiences, where it is in an input state

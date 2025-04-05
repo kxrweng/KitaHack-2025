@@ -39,33 +39,6 @@ const ModuleOne = () => {
 
   console.log(inputEntries);
 
-  // const handleSubmitInputAnswers = (e) => {
-
-  //   e.preventDefault();
-  //   const sourceArray = selectedState.chapter.exercises; //Array of exercises
-  //   setInputEntries((prev) => {
-  //     //Prev is an entire array, get down to its individual object first
-  //     prev.map((displayedExercise) => {
-  //       //Now it is its individual object. find displayedExercise.question in sourceArray
-  //       const targettedEntryFromSource = sourceArray.find(
-  //         (sourceEntry) => sourceEntry.question === displayedExercise.question
-  //       );
-  //       if (targettedEntryFromSource) {
-  //         //Now compare answer from displayedExercise and targettedEntryFromSource
-  //         if (
-  //           displayedExercise.answer.toLowerCase() ===
-  //           targettedEntryFromSource.answer.toLowerCase()
-  //         ) {
-  //           return { ...displayedExercise, isCorrect: true };
-  //         }
-  //       } else {
-  //         console.error('Targetted Entry not found!');
-  //         return displayedExercise;
-  //       }
-  //     });
-  //   });
-  // };
-
   const handleSubmitInputAnswers = (e) => {
     e.preventDefault();
     const sourceArray = selectedState.chapter.exercises;
@@ -101,7 +74,7 @@ const ModuleOne = () => {
   };
 
   console.log(inputEntries);
-  const [conversation, _setConversation] = useState(
+  const [conversation, setConversation] = useState(
     stringifiedChatHistory ? JSON.parse(stringifiedChatHistory) : []
     // faultyStringChatHistory ? JSON.parse(faultyStringChatHistory) : []
   );
