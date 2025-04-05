@@ -1,12 +1,15 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import DisplayCard from '../../../components/AuthUserComponents/ResumeBuilder/DisplayCard';
 import useGlobalContext from '../../../hooks/useGlobalContext';
 import { v4 as uuidv4 } from 'uuid';
+import { GoogleGenAI } from '@google/genai';
+import Markdown from 'react-markdown';
 const Experience = () => {
   const { user, setUser } = useGlobalContext();
   const navigate = useNavigate();
-
+  const expDescRef = useRef(null);
+  const projectDescRef = useRef(null);
   const [tempExp, setTempExp] = useState({
     role: '',
     location: '',
@@ -20,11 +23,86 @@ const Experience = () => {
     duration: '',
     description: '',
   });
-
+  const stringifiedExperiencesChatHistory = localStorage.getItem(
+    'experiencesChatHistory'
+  );
+  const [conversation, setConversation] = useState(
+    stringifiedExperiencesChatHistory
+      ? JSON.parse(stringifiedExperiencesChatHistory)
+      : []
+  );
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+  const chat = ai.chats.create({
+    model: 'gemini-1.5-flash-8b',
+    history: conversation,
+    config: {
+      maxOutputTokens: 100,
+      candidateCount: 1,
+      temperature: 0.5,
+      systemInstruction: `Try not to give too long response. Provide response with the description itself, one point on its issue, one way of fixing it, and an improved example. Only one for each. `,
+    },
+  });
+  const getResponse = async (description) => {
+    console.log('getResponse is called');
+    const message = `Comment on the description section of my resume. This is the description : ${description}.`;
+    console.log(message);
+    const response = await chat.sendMessage({ message });
+    console.log(response);
+    return response;
+  };
+  // const latestIntro = introRef.current?.value?.trim() ?? '';
   const [expEditMode, setExpEditMode] = useState(true); //This is the input field status
   const [projectEditMode, setProjectEditMode] = useState(true);
   const [currentExpUuid, setCurrentExpUuid] = useState(null);
   const [currentProjectUuid, setCurrentProjectUuid] = useState(null);
+
+  const handleGetFeedback = async () => {
+    if (expEditMode || projectEditMode) {
+      console.log('Enters here');
+      const latestExpDesc = expDescRef.current?.value?.trim() ?? '';
+      const latestProjectDesc = projectDescRef.current?.value?.trim() ?? '';
+      if (!latestExpDesc && !latestProjectDesc) {
+        console.log('Description is empty. Skipping feedback request.');
+        return;
+      }
+      try {
+        if (latestExpDesc) {
+          console.log('latestExpDesc is truthy');
+
+          await getResponse(latestExpDesc);
+        }
+
+        if (latestProjectDesc) {
+          await getResponse(latestProjectDesc);
+        }
+        const parsedConversation = JSON.stringify(conversation);
+        setConversation([...JSON.parse(parsedConversation)]);
+        localStorage.setItem('experiencesChatHistory', parsedConversation);
+      } catch (error) {
+        console.error('Error fetching feedback:', error);
+      }
+    } else {
+      const descArr = [
+        ...user.experiences.map((ex) => ex.description),
+        ...user.projects.map((pr) => pr.description),
+      ];
+      try {
+        const responses = await Promise.all(
+          descArr.map((desc) => getResponse(desc))
+        );
+        console.log(responses);
+        const parsedConversation = JSON.stringify(conversation);
+        console.log(parsedConversation);
+        setConversation([...JSON.parse(parsedConversation)]);
+        localStorage.setItem('experiencesChatHistory', parsedConversation);
+      } catch (error) {
+        console.error(error);
+      }
+    }
+  };
+
+  console.log(expEditMode);
+  console.log(projectEditMode);
   const handleExpChange = (e) =>
     setTempExp((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 
@@ -277,6 +355,7 @@ const Experience = () => {
               </div>
               <div>
                 <input
+                  ref={expDescRef}
                   id='description'
                   placeholder='Your Work Description'
                   value={tempExp.description}
@@ -405,6 +484,7 @@ const Experience = () => {
                   </div>
                   <div>
                     <input
+                      ref={expDescRef}
                       id='description'
                       placeholder='Your Work Description'
                       value={tempExp.description}
@@ -556,6 +636,7 @@ const Experience = () => {
                 </div>
                 <div>
                   <input
+                    ref={expDescRef}
                     id='description'
                     placeholder='Your Work Description'
                     value={tempExp.description}
@@ -620,6 +701,7 @@ const Experience = () => {
                 <div>
                   <input
                     id='description'
+                    ref={projectDescRef}
                     placeholder='Description'
                     value={tempProject.description}
                     onChange={(e) => handleProjectChange(e)}
@@ -743,6 +825,7 @@ const Experience = () => {
                   <div>
                     <input
                       id='description'
+                      ref={projectDescRef}
                       placeholder='Description'
                       value={tempProject.description}
                       onChange={(e) => handleProjectChange(e)}
@@ -883,6 +966,7 @@ const Experience = () => {
                   <div>
                     <input
                       id='description'
+                      ref={projectDescRef}
                       placeholder='Description'
                       value={tempProject.description}
                       onChange={(e) => handleProjectChange(e)}
@@ -909,7 +993,9 @@ const Experience = () => {
             Previous
           </div>{' '}
           <div className='flex flex-row gap-[10px]'>
-            <div className='border-[#1E3A8A] border rounded-lg px-[24px] py-[12px] text-[#1E3A8A] text-xl hover:cursor-pointer'>
+            <div
+              className='border-[#1E3A8A] border rounded-lg px-[24px] py-[12px] text-[#1E3A8A] text-xl hover:cursor-pointer'
+              onClick={handleGetFeedback}>
               Get Feedback
             </div>{' '}
             <div
@@ -920,8 +1006,37 @@ const Experience = () => {
           </div>
         </div>{' '}
       </div>
-      <div className='flex flex-col w-[30%] border sticky  right-0 top-0'>
-        <div>Chatbot here</div>
+      <div className='flex flex-col w-[30%]  sticky  right-0 top-0'>
+        <div className='flex flex-row gap-[10px] p-[16px] items-center border-b-1 bg-white border-slate-300 justify-between sticky top-0'>
+          <div className='font-semibold text-xl flex items-center justify-center text-[#1E3A8A]'>
+            Feedback From Miles
+          </div>
+          {/* <div
+                           className='text-xl font-semibold cursor-pointer'
+                           onClick={toggleHideChatContainer}>
+                           X
+                         </div> */}
+        </div>
+
+        {/* Chat Messages (Scrollable) */}
+        <div className='bg-[#DBEAFE] flex flex-col py-[24px] px-[12px] gap-[12px] flex-1 overflow-auto'>
+          {conversation.length > 0 &&
+            conversation.map(
+              (chat, index) =>
+                chat.role === 'model' && (
+                  <div
+                    key={index}
+                    className='flex flex-col gap-[4px]'>
+                    <div className='text-[#64748B] mr-auto font-semibold'>
+                      Miles 🤖
+                    </div>
+                    <div className='bg-white rounded-xl px-[12px] py-[16px]'>
+                      <Markdown>{chat.parts[0].text}</Markdown>
+                    </div>
+                  </div>
+                )
+            )}
+        </div>
       </div>
     </div>
   );
