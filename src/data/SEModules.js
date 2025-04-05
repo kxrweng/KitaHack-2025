@@ -71,6 +71,7 @@ const SEModules = [
             'Use Kanban for continuous workflow and ongoing tasks.',
           ],
         },
+
         exercises: [
           {
             question:
@@ -90,12 +91,12 @@ const SEModules = [
           {
             question:
               'This software development methodology integrates development and operations teams to enable continuous delivery.',
-            answer: 'idk bro',
+            answer: 'DevOps',
           },
           {
             question:
               'This item is used in Kanban to visualize tasks and their progress.',
-            answer: 'idk this too lmao',
+            answer: 'Kanban Board',
           },
         ],
       },
