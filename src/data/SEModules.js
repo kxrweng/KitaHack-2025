@@ -1175,6 +1175,16 @@ const SEModules = [
         ],
       },
     ],
+    applied: [
+      {
+        title: 'Applied Task - Introduction to SQL',
+        link: '/auth_user/applied_task'
+      },
+      {
+        title: 'Applied Scenario - Optimising SQL Queries',
+        link: '/auth_user/applied_scenario'
+      }
+    ]
   },
   {
     id: 7,

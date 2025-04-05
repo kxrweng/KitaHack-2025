@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { SEModules } from '../../../../data/SEModules';
 import { IoSendSharp } from 'react-icons/io5';
 import { GoogleGenAI } from '@google/genai';
+import { useNavigate } from 'react-router';
 
 const ModuleOne = () => {
   const stringifiedChatHistory = localStorage.getItem('chatHistory');
@@ -9,6 +10,7 @@ const ModuleOne = () => {
   // console.log(faultyStringChatHistory);
   // console.log(stringifiedChatHistory);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+  const navigate = useNavigate();
 
   const [selectedState, setSelectedState] = useState({
     module: SEModules[0],
@@ -205,6 +207,14 @@ const ModuleOne = () => {
                         }`}
                         onClick={() => setSelectedChapter(chapter)}>
                         {chapter.header.title}
+                      </div>
+                    ))}
+                    {module.applied && module.applied.map((chapter, index) => (
+                      <div
+                        key={`applied${index}`}
+                        className="flex py-[20px] px-[48px] bg-slate-200 text-black"
+                        onClick={() => navigate(chapter.link)}>
+                        {chapter.title}
                       </div>
                     ))}
                   </div>
