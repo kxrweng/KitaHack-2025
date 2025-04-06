@@ -66,10 +66,18 @@ const Question = () => {
     handleCheckSolution(formData);
   };
 
-  const navigateToSummary = () =>
+  const navigateToSummary = () => {
+    if (!formRef.current) return;
+    const formData = new FormData(formRef.current);
+    const userAnswer = formData.get('answer') as string;
+
     navigate('/auth_user/interview_practice/summary', {
-      state: { feedback },
+      state: {
+        feedback,
+        userAnswer,
+      },
     });
+  };
 
   return (
     <div className='w-full py-[64px]'>

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate, useLocation } from 'react-router';
+import Markdown from 'react-markdown';
 
 const InterviewSummary = () => {
   const location = useLocation();
-  const { feedback } = location?.state;
+  const { feedback, userAnswer } = location?.state;
   const [display, setDisplay] = useState(false);
+  console.log(userAnswer);
   //   const feedback =
   //     'Feedback: Your answer is too vague. It lacks details and has no clear resolution or impact. You can consider using the STAR (Situation, Task, Action, Result) methodology to improve your solution.\n\nSample Answer:\nSituation: In my previous role as a project manager, we were working on a software update for a major client, and a key developer unexpectedly left the team two weeks before the deadline.\n\nTask: I had to ensure the project stayed on track without compromising quality.\n\nAction: I immediately reassessed our timeline and reassigned tasks based on the team’s strengths. I also communicated with the client to adjust expectations and secured an extra resource from another team to help with critical components. To ensure we met the deadline, I organized daily check-ins to monitor progress and remove roadblocks.\n\nResult: As a result, we successfully delivered the update on time with minimal disruptions. The client appreciated our transparency, and the project even led to an extended contract with them.';
   const navigate = useNavigate();
@@ -38,15 +40,14 @@ const InterviewSummary = () => {
             {display ? (
               <>
                 <p>
-                  <a className='font-bold'>Your Answer: </a>One time, I had a
-                  difficult project with a tight deadline. It was really
-                  stressful, but I worked hard and managed to complete it. It
-                  was tough, but I got it done.
+                  <a className='font-bold'>Your Answer: </a>
+                  {userAnswer}
                 </p>
                 <div className='px-[16px] py-[12px] bg-blue-100 rounded-lg'>
-                  <p className='whitespace-pre-line text-blue-900'>
+                  {/* <p className='whitespace-pre-line text-blue-900'>
                     {feedback}
-                  </p>
+                  </p> */}
+                  <Markdown>{feedback}</Markdown>
                 </div>
               </>
             ) : (
