@@ -1,14 +1,46 @@
 import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
+import { GoogleGenAI } from '@google/genai';
 import useGlobalContext from '../../../hooks/useGlobalContext';
 const Question = () => {
   const { user, setUser } = useGlobalContext();
   const navigate = useNavigate();
   const formRef = useRef<HTMLFormElement>(null);
   const [isNextQuestion, setIsNextQuestion] = useState(false);
-  const [feedback, setFeedback] = useState('');
-  const navigateToSummary = () =>
-    navigate('/auth_user/interview_practice/summary');
+  const [response, setResponse] = useState('');
+
+  const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
+  const chat = ai.chats.create({
+    model: 'gemini-1.5-flash-8b',
+    config: {
+      candidateCount: 1,
+      temperature: 0.5,
+      systemInstruction: `You are a bot who helps people prepare for behavioural interview. Make your response brief, not too long. Come up with a response that includes the feedback of my answer, and give an alternative using the famous STAR method.`,
+    },
+  });
+  const stringifiedInterviewPracticeChatHistory = localStorage.getItem(
+    'interviewPracticeChatHistory'
+  );
+  // const [resultFromApi, setResultsFromApi] = useState(
+  //   stringifiedInterviewPracticeChhatHistory
+  //     ? JSON.parse(stringifiedInterviewPracticeChhatHistory)
+  //     : []
+  // );
+  const [feedback, setFeedback] = useState(
+    stringifiedInterviewPracticeChatHistory
+      ? JSON.parse(stringifiedInterviewPracticeChatHistory)
+      : ''
+  );
+
+  const getResponse = async (myAnswer) => {
+    console.log('getResponse is called');
+    const message = `Question : Could you tell me about a time you faced a challenge at work and how you handled it?
+   This is my answer : ${myAnswer}.`;
+    console.log(message);
+    const response = await chat.sendMessage({ message });
+    console.log(response);
+    return response;
+  };
 
   const handleCheckSolution = async (formData: FormData) => {
     const userAnswer = formData.get('answer') as string;
@@ -17,11 +49,13 @@ const Question = () => {
       setIsNextQuestion(true);
 
       // Process the answer here (e.g., send to API, validate, etc.)
-
-      // temporary
-      const tempString =
-        'Feedback: Your answer is too vague. It lacks details and has no clear resolution or impact. You can consider using the STAR (Situation, Task, Action, Result) methodology to improve your solution.\n\nSample Answer:\nSituation: In my previous role as a project manager, we were working on a software update for a major client, and a key developer unexpectedly left the team two weeks before the deadline.\n\nTask: I had to ensure the project stayed on track without compromising quality.\n\nAction: I immediately reassessed our timeline and reassigned tasks based on the team’s strengths. I also communicated with the client to adjust expectations and secured an extra resource from another team to help with critical components. To ensure we met the deadline, I organized daily check-ins to monitor progress and remove roadblocks.\n\nResult: As a result, we successfully delivered the update on time with minimal disruptions. The client appreciated our transparency, and the project even led to an extended contract with them.';
-      setFeedback(tempString);
+      const LLMResponse = await getResponse(userAnswer);
+      console.log(LLMResponse);
+      setFeedback(LLMResponse.text);
+      localStorage.setItem(
+        'stringifiedInterviewPracticeChatHistory',
+        JSON.stringify(LLMResponse.text)
+      );
     }
   };
 
@@ -31,6 +65,11 @@ const Question = () => {
     const formData = new FormData(formRef.current);
     handleCheckSolution(formData);
   };
+
+  const navigateToSummary = () =>
+    navigate('/auth_user/interview_practice/summary', {
+      state: { feedback },
+    });
 
   return (
     <div className='w-full py-[64px]'>
@@ -66,7 +105,9 @@ const Question = () => {
             ref={formRef}
             onSubmit={handleSubmit}>
             <div className='flex flex-col gap-[8px] '>
-              <div className='text-[#1E3A8A] font-bold text-lg'>Your Age</div>
+              <div className='text-[#1E3A8A] font-bold text-lg'>
+                Your Answer
+              </div>
               <div className='flex bg-white h-[144px] p-4 outline-slate-300 rounded-xl outline-1'>
                 <textarea
                   className='text-xl w-full focus:outline-none'
