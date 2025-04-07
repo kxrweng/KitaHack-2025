@@ -25,7 +25,6 @@ export const GlobalProvider = ({ children }) => {
       skills: [],
       experiences: [],
       projects: [],
-      firstTime: true,
     }
   );
 
