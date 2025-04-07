@@ -65,33 +65,41 @@ const GeneratedResume = () => {
       </div>
 
       <div className='flex flex-col gap-[16px]'>
-        <div className='font-bold text-2xl'>Work Experience</div>
-        {user.experiences.map((exp, index) => (
-          <div
-            key={index}
-            className='flex flex-col gap-[4px]'>
-            <div className='font-semibold text-xl'>{exp.role}</div>
-            <div className='italic text-lg'>{`${exp.location}, ${exp.duration}`}</div>
-            <div className='text-lg'>{exp.description}</div>
-          </div>
-        ))}
+        {user.experiences.length > 0 && (
+          <>
+            <div className='font-bold text-2xl'>Work Experience</div>
+            {user.experiences.map((exp, index) => (
+              <div
+                key={index}
+                className='flex flex-col gap-[4px]'>
+                <div className='font-semibold text-xl'>{exp.role}</div>
+                <div className='italic text-lg'>{`${exp.location}, ${exp.duration}`}</div>
+                <div className='text-lg'>{exp.description}</div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
 
       <div className='flex flex-col gap-[16px]'>
-        <div className='font-bold text-2xl'>Projects</div>
-        {user.projects.map((exp, index) => (
-          <div
-            key={index}
-            className='flex flex-col gap-[4px]'>
-            <div className='font-semibold text-xl'>{exp.name}</div>
-            <div className='italic text-lg'>
-              {' '}
-              <a className='underline text-blue-600'>{exp.link}</a>,{' '}
-              {exp.duration}
-            </div>
-            <div className='text-lg'>{exp.description}</div>
-          </div>
-        ))}
+        {user.projects.length > 0 && (
+          <>
+            <div className='font-bold text-2xl'>Projects</div>
+            {user.projects.map((exp, index) => (
+              <div
+                key={index}
+                className='flex flex-col gap-[4px]'>
+                <div className='font-semibold text-xl'>{exp.name}</div>
+                <div className='italic text-lg'>
+                  {' '}
+                  <a className='underline text-blue-600'>{exp.link}</a>,{' '}
+                  {exp.duration}
+                </div>
+                <div className='text-lg'>{exp.description}</div>
+              </div>
+            ))}
+          </>
+        )}
       </div>
 
       <div className='flex flex-col gap-[12px]'>

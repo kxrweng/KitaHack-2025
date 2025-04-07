@@ -122,9 +122,6 @@ const Skills = () => {
           </div>
         </div>
       </div>
-      <div className='flex flex-col w-[30%] border sticky  right-0 top-0'>
-        <div>Chatbot here</div>
-      </div>
     </div>
   );
 };

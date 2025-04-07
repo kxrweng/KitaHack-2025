@@ -3,8 +3,10 @@ import { SEModules } from '../../../../data/SEModules';
 import { IoSendSharp } from 'react-icons/io5';
 import { GoogleGenAI } from '@google/genai';
 import { useNavigate } from 'react-router';
+import useGlobalContext from '../../../../hooks/useGlobalContext';
 
 const ModuleOne = () => {
+  const { user } = useGlobalContext();
   const stringifiedChatHistory = localStorage.getItem('chatHistory');
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
   const navigate = useNavigate();
@@ -251,7 +253,7 @@ const ModuleOne = () => {
 
           <div className='w-full rounded-xl'>
             <iframe
-              src='https://www.youtube.com/embed/dQw4w9WgXcQ'
+              src='https://www.youtube.com/embed/WSq72fWYLDE?si=qr3cHEYFrylNUgK4'
               className='w-full h-[630px] rounded-xl'
               allowFullScreen></iframe>
           </div>
@@ -358,7 +360,7 @@ const ModuleOne = () => {
                 Miles 🤖
               </div>
               <div className='bg-white rounded-xl px-[12px] py-[16px]'>
-                Hello KWLim! Great to see you here!
+                Hello {user.name}! Great to see you here!
               </div>
             </div>
             {
