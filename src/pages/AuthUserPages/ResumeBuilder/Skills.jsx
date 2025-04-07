@@ -5,7 +5,7 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 const Skills = () => {
   const navigate = useNavigate();
   const { user, setUser } = useGlobalContext();
-  console.log(user);
+  user;
   const [recommendedSkills, setRecommendedSkills] = useState([
     'Node.js',
     'Next.js',

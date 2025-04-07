@@ -28,6 +28,8 @@ import { Navigate } from 'react-router-dom';
 import Experience from './pages/AuthUserPages/ResumeBuilder/Experience';
 import ResumePreview from './pages/AuthUserPages/ResumeBuilder/ResumePreview';
 import ResumeReview from './pages/AuthUserPages/ResumeBuilder/ResumeReview';
+import LogIn from './pages/Auth/LogIn';
+import SignUp from './pages/Auth/SignUp';
 const App = () => {
   return (
     <BrowserRouter>
@@ -36,10 +38,19 @@ const App = () => {
           path='/'
           element={
             <Navigate
-              to='/new_user/landing'
+              to='/signup'
               replace
             />
           }
+        />
+        <Route
+          path='/signup'
+          element={<SignUp />}
+        />
+
+        <Route
+          path='/login'
+          element={<LogIn />}
         />
 
         <Route

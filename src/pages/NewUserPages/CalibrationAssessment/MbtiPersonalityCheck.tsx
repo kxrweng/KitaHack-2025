@@ -4,7 +4,7 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 const MbtiPersonalityCheck = () => {
   const navigate = useNavigate();
   const { user, setUser } = useGlobalContext();
-  console.log(user);
+  user;
   const navigateToRecommendedCareerInterest = () =>
     navigate('/new_user/recommended_career_interest');
   const navigateToPrev = () => navigate(-1);
@@ -56,6 +56,7 @@ const MbtiPersonalityCheck = () => {
               <select
                 className='bg-white p-4 w-[280px] h-[56px] outline-slate-300 rounded-xl outline-1'
                 id='mbti'
+                defaultValue='isfj'
                 onChange={(e) => handleInputChange(e)}>
                 <option value='isfj'>ISFJ</option>
                 <option value='intj'>INTJ</option>

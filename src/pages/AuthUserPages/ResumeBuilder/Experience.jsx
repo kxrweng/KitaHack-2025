@@ -43,11 +43,11 @@ const Experience = () => {
     },
   });
   const getResponse = async (description) => {
-    console.log('getResponse is called');
+    ('getResponse is called');
     const message = `Comment on the description section of my resume. This is the description : ${description}.`;
-    console.log(message);
+    message;
     const response = await chat.sendMessage({ message });
-    console.log(response);
+    response;
     return response;
   };
   // const latestIntro = introRef.current?.value?.trim() ?? '';
@@ -58,16 +58,16 @@ const Experience = () => {
 
   const handleGetFeedback = async () => {
     if (expEditMode || projectEditMode) {
-      console.log('Enters here');
+      ('Enters here');
       const latestExpDesc = expDescRef.current?.value?.trim() ?? '';
       const latestProjectDesc = projectDescRef.current?.value?.trim() ?? '';
       if (!latestExpDesc && !latestProjectDesc) {
-        console.log('Description is empty. Skipping feedback request.');
+        ('Description is empty. Skipping feedback request.');
         return;
       }
       try {
         if (latestExpDesc) {
-          console.log('latestExpDesc is truthy');
+          ('latestExpDesc is truthy');
 
           await getResponse(latestExpDesc);
         }
@@ -90,9 +90,9 @@ const Experience = () => {
         const responses = await Promise.all(
           descArr.map((desc) => getResponse(desc))
         );
-        console.log(responses);
+        responses;
         const parsedConversation = JSON.stringify(conversation);
-        console.log(parsedConversation);
+        parsedConversation;
         setConversation([...JSON.parse(parsedConversation)]);
         localStorage.setItem('experiencesChatHistory', parsedConversation);
       } catch (error) {
@@ -101,18 +101,18 @@ const Experience = () => {
     }
   };
 
-  console.log(expEditMode);
-  console.log(projectEditMode);
+  expEditMode;
+  projectEditMode;
   const handleExpChange = (e) =>
     setTempExp((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 
-  console.log(currentProjectUuid);
-  console.log(projectEditMode);
+  currentProjectUuid;
+  projectEditMode;
   const handleProjectChange = (e) =>
     setTempProject((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 
-  const handleGenerateResume = () => {
-    console.log('HandleGenerateResume clicked!');
+  const handleGenerateResume = async () => {
+    ('HandleGenerateResume clicked!');
     localStorage.setItem('savedUser', JSON.stringify(user));
     navigate('/auth_user/resume_builder/build/preview');
   };
@@ -120,7 +120,7 @@ const Experience = () => {
   //For Editting Experiences, where it is in an input state
   const handleSaveExpChanges = (e) => {
     e.preventDefault();
-    console.log('Saving changed experience');
+    ('Saving changed experience');
     setUser((currentUser) => {
       return {
         ...currentUser,
@@ -136,7 +136,7 @@ const Experience = () => {
 
   const handleSaveProjectChanges = (e) => {
     e.preventDefault();
-    console.log('Saving changed project');
+    ('Saving changed project');
     setUser((currentUser) => {
       return {
         ...currentUser,
@@ -165,7 +165,7 @@ const Experience = () => {
 
   //For editting experiences, where it is in an input state
   const handleEditExp = (uuid) => {
-    console.log('handleEditExp is running');
+    ('handleEditExp is running');
     /* 
     Find the targetted experience in user.experiences
     Switch to input fields mode 
@@ -183,7 +183,7 @@ const Experience = () => {
   };
 
   const handleEditProject = (uuid) => {
-    console.log('handleEditProject is running');
+    ('handleEditProject is running');
     /* 
     Find the targetted experience in user.experiences
     Switch to input fields mode 
@@ -210,7 +210,7 @@ const Experience = () => {
   };
   //For adding new experiences
   const handleExpSubmit = (e) => {
-    console.log('A new experience is submitted!');
+    ('A new experience is submitted!');
     //Only for new entries
     //Copy the current tempExp into user.experiences.
     //If user.experiences.length === 0, put as new entry
@@ -246,7 +246,7 @@ const Experience = () => {
   };
 
   const handleProjectSubmit = (e) => {
-    console.log('A new project is submitted!');
+    ('A new project is submitted!');
 
     e.preventDefault();
     if (
@@ -529,7 +529,7 @@ const Experience = () => {
                         <img
                           src='/EditIcon.png'
                           className='w-[20px] h-[20px]'
-                          onClick={() => console.log('Hi')}
+                          onClick={() => ('Hi')}
                         />
                         <img
                           src='/DeleteIcon.png'

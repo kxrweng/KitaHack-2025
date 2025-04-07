@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router';
 import useGlobalContext from '../../../hooks/useGlobalContext';
 const Introduction = () => {
   const { user, setUser } = useGlobalContext();
-  console.log(user);
+  user;
 
   const handleInputChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.id]: e.target.value }));

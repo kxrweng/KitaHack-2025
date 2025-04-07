@@ -8,7 +8,7 @@ export const GlobalProvider = ({ children }) => {
 
   const [user, setUser] = useState(
     JSON.parse(savedUser) || {
-      name: 'Test User',
+      name: '',
       age: '',
       gender: '',
       currentField: '',
@@ -25,6 +25,7 @@ export const GlobalProvider = ({ children }) => {
       skills: [],
       experiences: [],
       projects: [],
+      firstTime: true,
     }
   );
 

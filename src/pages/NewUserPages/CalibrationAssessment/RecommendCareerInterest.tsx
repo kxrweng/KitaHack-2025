@@ -6,7 +6,7 @@ const RecommendCareerInterest = () => {
   const navigate = useNavigate();
   const navigateToPrev = () => navigate(-1);
   const navigateToAuthLanding = () => {
-    console.log('Clicked');
+    ('Clicked');
     navigate('/auth_user/pathways');
   };
   return (

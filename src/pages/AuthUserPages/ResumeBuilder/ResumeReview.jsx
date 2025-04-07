@@ -21,7 +21,7 @@ const ResumeReview = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const file = location?.state?.file;
-  console.log(resultFromApi);
+  resultFromApi;
 
   const uploadFileAndGenerateContent = async () => {
     try {
@@ -31,7 +31,7 @@ const ResumeReview = () => {
         config: { mimeType: file.type }, // Get MIME type from the file object
       });
 
-      console.log('Uploaded file:', myfile);
+      'Uploaded file:', myfile;
 
       const result = await ai.models.generateContent({
         model: 'gemini-2.0-flash',
@@ -57,7 +57,7 @@ const ResumeReview = () => {
       );
 
       // setConversation([...result]);
-      console.log('Generated content:', result);
+      'Generated content:', result;
     } catch (error) {
       console.error('Error uploading file or generating content:', error);
     }
@@ -78,7 +78,7 @@ const ResumeReview = () => {
   //           config: { mimeType: file.type }, // Get MIME type from the file object
   //         });
 
-  //         console.log('Uploaded file:', myfile);
+  //         ('Uploaded file:', myfile);
 
   //         const result = await ai.models.generateContent({
   //           model: 'gemini-2.0-flash',
@@ -104,7 +104,7 @@ const ResumeReview = () => {
   //         );
 
   //         // setConversation([...result]);
-  //         console.log('Generated content:', result);
+  //         ('Generated content:', result);
   //       } catch (error) {
   //         console.error('Error uploading file or generating content:', error);
   //       }
