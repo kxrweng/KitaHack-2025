@@ -2,6 +2,7 @@ import React, { useState, useRef } from 'react';
 import { useNavigate } from 'react-router';
 import { GoogleGenAI } from '@google/genai';
 import useGlobalContext from '../../../hooks/useGlobalContext';
+import Markdown from 'react-markdown';
 const Question = () => {
   const { user, setUser } = useGlobalContext();
   const navigate = useNavigate();
@@ -131,7 +132,9 @@ const Question = () => {
 
             {feedback && (
               <div className='px-[16px] py-[12px] bg-blue-100 rounded-lg'>
-                <p className='whitespace-pre-line text-blue-900'>{feedback}</p>
+                <p className='whitespace-pre-line text-blue-900'>
+                  <Markdown>{feedback}</Markdown>
+                </p>
               </div>
             )}
 

@@ -584,6 +584,7 @@ const Experience = () => {
                       <img
                         src='/DeleteIcon.png'
                         className='w-[20px] h-[20px]'
+                        onClick={() => handleExpDelete(state.id)}
                       />
                     </div>
                   </div>
@@ -913,6 +914,7 @@ const Experience = () => {
                         <img
                           src='/DeleteIcon.png'
                           className='w-[20px] h-[20px]'
+                          onClick={() => handleProjectDelete(state.id)}
                         />
                       </div>
                     </div>

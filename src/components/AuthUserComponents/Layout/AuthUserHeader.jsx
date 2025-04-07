@@ -6,6 +6,10 @@ const AuthUserHeader = () => {
   const { user } = useGlobalContext();
   const [currentSelectedPage, setCurrentSelectedPage] = useState('Upskill');
 
+  const navigateToAccount = (e) => {
+    e.preventDefault();
+    navigate('/auth_user/account');
+  };
   useEffect(() => {
     if (currentSelectedPage === 'Upskill') {
       navigate('/auth_user/pathways');
@@ -104,6 +108,7 @@ const AuthUserHeader = () => {
           <img
             src='/UserAvatar.png'
             className='w-[40px] h-[40px] border-2 border-[#1D4ED8] rounded-full'
+            onClick={(e) => navigateToAccount(e)}
           />
           <div className='font-semibold text-[#1D4ED8]'>{user.name}</div>
         </div>
