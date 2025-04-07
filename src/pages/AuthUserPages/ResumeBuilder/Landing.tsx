@@ -28,7 +28,7 @@ const Landing = () => {
         </div>
         <div className='flex w-full py-[80px] bg-[#EFF6FF] flex-col outline-dotted outline-[#94A3B8]  justify-center items-center gap-[16px]'>
           <div className='text-slate-700 text-lg'>
-            Upload your current resume as PDF for feedback
+            Upload your current resume as JPG for feedback
           </div>
           {/* <button className="bg-[#1D4ED8] rounded-xl py-3 px-6 text-white">
 						Upload Resume
