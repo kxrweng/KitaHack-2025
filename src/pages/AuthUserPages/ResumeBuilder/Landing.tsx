@@ -9,7 +9,7 @@ const Landing = () => {
 
   const handleFileUpload = (e) => {
     const file = e.target.files[0];
-    console.log(file);
+    file;
     if (file && file.type === 'image/jpeg') {
       setUploadedFileName(file.name);
 

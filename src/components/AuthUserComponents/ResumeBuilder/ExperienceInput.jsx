@@ -8,7 +8,7 @@ const ExperienceInput = ({
   setProjects = () => {},
 }) => {
   const { user, setUser } = useGlobalContext();
-  console.log(user);
+  user;
   //  const [tempExp, setTempExp] = useState({
   //     role: '',
   //     location: '',
@@ -44,7 +44,7 @@ const ExperienceInput = ({
     setTempExp((prev) => ({ ...prev, [e.target.id]: e.target.value }));
 
   const handleSaveExp = () => {
-    console.log('handleSaveExp is clicked!');
+    ('handleSaveExp is clicked!');
     setExperiences((prev) => [...prev, tempExp]);
     // setUser((prev) => ({ ...prev, experiences: [...experiences] }));
     setTempExp({ role: '', location: '', duration: '', description: '' });
@@ -57,7 +57,7 @@ const ExperienceInput = ({
   };
 
   const handleAddMore = () => {
-    console.log('handleAddMore is clicked!');
+    ('handleAddMore is clicked!');
   };
   return (
     <div className='flex flex-col gap-[8px]'>

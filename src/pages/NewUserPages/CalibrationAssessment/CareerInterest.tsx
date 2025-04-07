@@ -5,7 +5,7 @@ import useGlobalContext from '../../../hooks/useGlobalContext';
 const CareerInterest = () => {
   const navigate = useNavigate();
   const { user, setUser } = useGlobalContext();
-  console.log(user);
+  user;
   const navigateToPrev = () => navigate(-1);
   const navigateToMbtiCheck = () =>
     navigate('/new_user/mbti_personality_check');
@@ -55,6 +55,7 @@ const CareerInterest = () => {
 
               <select
                 id='fieldOfInterest'
+                defaultValue='Finance'
                 className='bg-white p-4 w-[280px] h-[56px] outline-slate-300 rounded-xl outline-1'
                 onChange={(e) => handleInputChange(e)}>
                 <option value='ComputerScience'>Computer Science</option>

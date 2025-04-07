@@ -7,7 +7,7 @@ import Markdown from 'react-markdown';
 
 const ResumeDetails = () => {
   const { user, setUser } = useGlobalContext();
-  console.log(user);
+  user;
   const navigate = useNavigate();
 
   const [tempEduInfo, setTempEduInfo] = useState({
@@ -23,7 +23,7 @@ const ResumeDetails = () => {
   const introRef = useRef(null);
   const stringifiedDetailsChatHistory =
     localStorage.getItem('detailsChatHistory');
-  console.log(stringifiedDetailsChatHistory);
+  stringifiedDetailsChatHistory;
   const [conversation, setConversation] = useState(
     stringifiedDetailsChatHistory
       ? JSON.parse(stringifiedDetailsChatHistory)
@@ -42,30 +42,30 @@ const ResumeDetails = () => {
   });
 
   useEffect(() => {
-    console.log('Conversation updated:', conversation);
+    'Conversation updated:', conversation;
   }, [conversation]);
 
-  // console.log(addMore);
+  // (addMore);
   const handleChange = (e) => {
     setUser((prev) => ({ ...prev, [e.target.name]: e.target.value }));
   };
 
   const getResponse = async (introduction) => {
-    console.log('getResponse is called');
+    ('getResponse is called');
     const message = `Comment on the brief introduction section of my resume. This is the introduction : ${introduction}.`;
-    console.log(message);
+    message;
     const response = await chat.sendMessage({ message });
-    console.log(response);
+    response;
     return response;
   };
 
-  console.log(conversation);
+  conversation;
 
   const handleGetFeedback = async () => {
     const latestIntro = introRef.current?.value?.trim() ?? '';
 
     if (!latestIntro) {
-      console.log('Introduction is empty. Skipping feedback request.');
+      ('Introduction is empty. Skipping feedback request.');
       return;
     }
 
@@ -74,11 +74,11 @@ const ResumeDetails = () => {
     try {
       await getResponse(latestIntro);
       const parsedConversation = JSON.stringify(conversation);
-      console.log(parsedConversation);
+      parsedConversation;
       setConversation([...JSON.parse(parsedConversation)]);
       localStorage.setItem('detailsChatHistory', parsedConversation);
     } catch (error) {
-      console.log(error);
+      error;
     }
   };
 
@@ -105,7 +105,7 @@ const ResumeDetails = () => {
   };
 
   const handleEditEdu = (uuid) => {
-    console.log('handleEditEdu is running');
+    ('handleEditEdu is running');
     const targettedEdu = user.education.find((edu) => edu.id === uuid);
     if (!targettedEdu) {
       console.error('Education not found!');
@@ -128,7 +128,7 @@ const ResumeDetails = () => {
   };
   const handleSaveEduChanges = (e) => {
     e.preventDefault();
-    console.log('Saving changed education');
+    ('Saving changed education');
     setUser((currentUser) => ({
       ...currentUser,
       education: currentUser.education.map((edu) =>

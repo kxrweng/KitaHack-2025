@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router';
 const ModuleOne = () => {
   const stringifiedChatHistory = localStorage.getItem('chatHistory');
   // const faultyStringChatHistory = localStorage.getItem("faultyChatHistory");
-  // console.log(faultyStringChatHistory);
-  // console.log(stringifiedChatHistory);
+  // (faultyStringChatHistory);
+  // (stringifiedChatHistory);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
   const navigate = useNavigate();
 
@@ -39,7 +39,7 @@ const ModuleOne = () => {
     );
   };
 
-  console.log(inputEntries);
+  inputEntries;
 
   const handleSubmitInputAnswers = (e) => {
     e.preventDefault();
@@ -75,7 +75,7 @@ const ModuleOne = () => {
     );
   };
 
-  console.log(inputEntries);
+  inputEntries;
   const [conversation, setConversation] = useState(
     stringifiedChatHistory ? JSON.parse(stringifiedChatHistory) : []
     // faultyStringChatHistory ? JSON.parse(faultyStringChatHistory) : []
@@ -90,8 +90,8 @@ const ModuleOne = () => {
     chatContainer: true,
   });
 
-  console.log(conversation);
-  console.log(JSON.stringify(conversation));
+  conversation;
+  JSON.stringify(conversation);
 
   const chat = ai.chats.create({
     model: 'gemini-1.5-flash-8b',
@@ -106,9 +106,9 @@ const ModuleOne = () => {
   });
 
   const getResponse = async (message) => {
-    console.log('getResponse called with:', message);
+    'getResponse called with:', message;
     const response = await chat.sendMessage({ message });
-    console.log(response);
+    response;
     return response;
   };
 
@@ -119,11 +119,11 @@ const ModuleOne = () => {
     try {
       await getResponse(message);
       const parsedConversation = JSON.stringify(conversation);
-      console.log(parsedConversation);
+      parsedConversation;
       localStorage.setItem('chatHistory', parsedConversation);
       // localStorage.setItem("faultyChatHistory", JSON.stringify(conversation));
     } catch (error) {
-      console.log(error);
+      error;
     } finally {
       setMessageInput('');
       setMessageInputLoadingStatus(false);
@@ -209,14 +209,15 @@ const ModuleOne = () => {
                         {chapter.header.title}
                       </div>
                     ))}
-                    {module.applied && module.applied.map((chapter, index) => (
-                      <div
-                        key={`applied${index}`}
-                        className="flex py-[20px] px-[48px] bg-slate-200 text-black"
-                        onClick={() => navigate(chapter.link)}>
-                        {chapter.title}
-                      </div>
-                    ))}
+                    {module.applied &&
+                      module.applied.map((chapter, index) => (
+                        <div
+                          key={`applied${index}`}
+                          className='flex py-[20px] px-[48px] bg-slate-200 text-black'
+                          onClick={() => navigate(chapter.link)}>
+                          {chapter.title}
+                        </div>
+                      ))}
                   </div>
                 )}
               </div>

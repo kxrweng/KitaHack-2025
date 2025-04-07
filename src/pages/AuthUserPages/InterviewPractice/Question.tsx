@@ -33,24 +33,24 @@ const Question = () => {
   );
 
   const getResponse = async (myAnswer) => {
-    console.log('getResponse is called');
+    ('getResponse is called');
     const message = `Question : Could you tell me about a time you faced a challenge at work and how you handled it?
    This is my answer : ${myAnswer}.`;
-    console.log(message);
+    message;
     const response = await chat.sendMessage({ message });
-    console.log(response);
+    response;
     return response;
   };
 
   const handleCheckSolution = async (formData: FormData) => {
     const userAnswer = formData.get('answer') as string;
     if (userAnswer.trim() !== '') {
-      console.log(userAnswer);
+      userAnswer;
       setIsNextQuestion(true);
 
       // Process the answer here (e.g., send to API, validate, etc.)
       const LLMResponse = await getResponse(userAnswer);
-      console.log(LLMResponse);
+      LLMResponse;
       setFeedback(LLMResponse.text);
       localStorage.setItem(
         'stringifiedInterviewPracticeChatHistory',
