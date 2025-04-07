@@ -6,9 +6,6 @@ import { useNavigate } from 'react-router';
 
 const ModuleOne = () => {
   const stringifiedChatHistory = localStorage.getItem('chatHistory');
-  // const faultyStringChatHistory = localStorage.getItem("faultyChatHistory");
-  // (faultyStringChatHistory);
-  // (stringifiedChatHistory);
   const ai = new GoogleGenAI({ apiKey: import.meta.env.VITE_GEMINI_API_KEY });
   const navigate = useNavigate();
 
@@ -97,9 +94,9 @@ const ModuleOne = () => {
     model: 'gemini-1.5-flash-8b',
     history: conversation,
     config: {
-      maxOutputTokens: 50,
+      maxOutputTokens: 100,
       candidateCount: 1,
-      temperature: 0.1,
+      temperature: 0.5,
       systemInstruction:
         'Give brief,concise answers paragraphically. No point forms',
     },
